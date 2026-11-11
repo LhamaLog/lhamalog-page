@@ -6,7 +6,8 @@
     "node": "26.x"
   },
   "scripts": {
-    "dev": "vite"
+    "dev": "vite",
+    "build": "vite build"
   },
   "dependencies": {
     "react": "^19.3.1",
