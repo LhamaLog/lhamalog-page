@@ -1,0 +1,18 @@
+# Ambiente local do lhamalog-page (somente desenvolvimento).
+# Uso (na raiz do repositório): docker compose up --build
+#   ou: make run
+name: lhamalog-page-local
+
+services:
+  page:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: lhamalog-page
+    container_name: lhamalog-page
+    restart: "no"
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/app
+      - /app/node_modules
