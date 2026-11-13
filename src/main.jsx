@@ -1,5 +1,9 @@
+import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
-
-const phrase = "lhamalog-page no ar";
-
-createRoot(document.getElementById("root")).render(phrase);
+import { LandingPage } from "./features/landing/LandingPage";
+import "./styles.css";
+createRoot(document.getElementById("root")).render(
+  <StrictMode>
+    <LandingPage />
+  </StrictMode>,
+);

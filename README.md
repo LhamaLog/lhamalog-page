@@ -1,8 +1,11 @@
 # lhamalog-page
 
-Landing page do LhamaLog. Este repositório existe para apresentar, no futuro, os planos, as funcionalidades e a descrição do produto. Nesta inicialização a página só confirma que o projeto está no ar.
+Landing page pública do LhamaLog: apresenta o produto, como funciona, os recursos, a integração por OpenTelemetry, os planos,
+as perguntas frequentes e leva ao cadastro no sistema (lhamalog-web).
 
-A frase visível é `lhamalog-page no ar`.
+Seções: barra flutuante, topo com uma tela de exemplo, "Como funciona", recursos (4 blocos com telas de exemplo), integração (exemplo OTLP),
+planos, perguntas frequentes, chamada final e rodapé. A especificação está em `specs/002-landing-page-publica/`
+(a nota `NOTA-ADAPTACAO.md` explica o que mudou ao trazer a landing para este repositório).
 
 ## Pré-requisitos
 
@@ -109,7 +112,7 @@ make run
 
 O comando constrói a imagem `lhamalog-page` e sobe só a página, em desenvolvimento, na porta 3000. A primeira execução baixa a imagem do Node 26 e pode demorar. Não sobe banco, fila nem outra ferramenta.
 
-Abra [http://localhost:3000](http://localhost:3000). O único texto visível é `lhamalog-page no ar`.
+Abra [http://localhost:3000](http://localhost:3000). A landing page aparece completa.
 
 O processo fica nesse terminal. Interrompa com Ctrl+C.
 
@@ -137,7 +140,7 @@ npm install
 npm run dev
 ```
 
-A página abre no mesmo endereço, [http://localhost:3000](http://localhost:3000), com a mesma frase.
+A página abre no mesmo endereço, [http://localhost:3000](http://localhost:3000).
 
 ### Imagem
 
@@ -157,13 +160,41 @@ docker build -t lhamalog-page .
 
 Os dois caminhos usam a porta 3000. Se ela já estiver em uso, o início falha de forma visível. Libere a porta 3000 e execute o comando outra vez.
 
+## Configuração
+
+Copie `.env.example` para `.env.local` (ignorado pelo Git) e ajuste:
+
+| Variável | Para que serve |
+|---|---|
+| `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Entrar", "Começar grátis" e "Contratar" levam para lá. Vazio: "Entrar" e "Começar grátis" usam `/sign-in` e `/sign-up` deste site, e "Contratar" mostra "A contratação não está disponível no momento. Tente novamente mais tarde." |
+| `VITE_API_URL` | API do Core, de onde vem a lista pública de planos (`GET /api/v1/planos`). |
+| `VITE_USAR_DADOS_FALSOS` | Só em desenvolvimento: `true` mostra planos falsos sem o Core (o build de produção ignora). Variações pela URL: `?simular=vazio` e `?simular=erro`. |
+
+"Contratar" leva a `<VITE_APP_URL>/sign-up?redirect_url=<VITE_APP_URL>/assinatura/contratar?plano=<PLANO>&periodo=<PERIODO>`.
+
+## Testes e build
+
+```bash
+npm test
+npm run build
+```
+
+`npm test` roda os testes de `tests/` com `node --test`: textos iguais aos aprovados na spec, contraste das cores, endereços dos botões
+e o selo do teste grátis. `npm run build` gera a página em `dist/` (não é o modo de início em desenvolvimento).
+
 ## Layout
 
 ```
-index.html          documento da página
-src/main.jsx        frase lhamalog-page no ar
-vite.config.js      servidor de desenvolvimento na porta 3000
-Dockerfile          imagem Node 26
-docker-compose.yml  sobe só a página
-Makefile            make run, make build, make docker
+index.html                         documento da página
+src/main.jsx                       monta a landing
+src/styles.css                     Tailwind e rolagem suave
+src/features/landing/              landing: textos (content.js), cores (landingTokens.js), seções e telas de exemplo
+src/features/subscription/         cartões, seletor de periodicidade e dados dos planos (mesmo contrato da LLT-230)
+src/shared/                        logo, endereços do app (appLinks.js), erro de API e estados (carregando, erro, vazio)
+tests/                             testes com node --test
+specs/                             Spec Kit: 001 (inicialização) e 002 (landing page)
+vite.config.js                     servidor de desenvolvimento na porta 3000, React e Tailwind
+Dockerfile                         imagem Node 26
+docker-compose.yml                 sobe só a página
+Makefile                           make run, make build, make docker
 ```
