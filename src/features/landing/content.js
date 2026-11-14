@@ -9,7 +9,7 @@ export const NAV_LINKS = [
   { id: "perguntas", label: "Perguntas" },
 ];
 export const SECTION_IDS = ["como-funciona", "recursos", "planos", "perguntas"];
-export const NAV_ACTIONS = { entrar: "Entrar", comecarGratis: "Começar grátis" };
+export const NAV_ACTIONS = { entrar: "Acessar Página", comecarGratis: "Começar grátis" };
 // Topo (FR-002)
 export const HERO = {
   titulo: "Entenda por que sua aplicação falhou",
@@ -63,19 +63,12 @@ export const FEATURES = [
     invertido: true,
   },
 ];
-// Exemplo de configuração OTLP (FR-006): só marcadores, nunca endereço ou token reais. Fica numa lista própria porque o teste
-// de "sem números" dos textos da página não vale para ele.
-export const OTLP_EXAMPLE_LINES = [
-  "OTEL_EXPORTER_OTLP_ENDPOINT=<ENDEREÇO_DO_LHAMALOG>",
-  "OTEL_EXPORTER_OTLP_PROTOCOL=http/protobuf",
-  "OTEL_EXPORTER_OTLP_HEADERS=Authorization=Bearer <TOKEN_DO_PRODUTO>",
-];
 // Perguntas frequentes (FR-008)
 export const FAQ = [
   {
     pergunta: "Como envio os logs da minha aplicação?",
     resposta:
-      "Sua aplicação envia logs e traces por OpenTelemetry (OTLP), por HTTP ou gRPC. Cada produto tem um token, que vai no cabeçalho de autorização da requisição. O exemplo da seção de integração desta página mostra a configuração.",
+      "Sua aplicação envia logs e traces por OpenTelemetry (OTLP), por HTTP ou gRPC. Cada produto tem um token, que vai no cabeçalho de autorização da requisição.",
   },
   {
     pergunta: "O que acontece com os dados sensíveis dos meus logs?",
@@ -103,19 +96,16 @@ export const FINAL_CTA = {
   frase: "Crie sua conta no plano grátis e envie os logs da sua aplicação por OpenTelemetry.",
   botao: "Começar grátis",
 };
-// Rodapé (FR-009, FR-027). Os endereços ficam em legalLinks.js e socialLinks.js.
+// Rodapé (FR-009, FR-027). Os endereços ficam em legalLinks.js.
 // O ano do "©" é a única exceção à regra de números (FR-016, FR-027).
 export const FOOTER = {
   termos: "Termos de Uso",
   politica: "Política de Privacidade",
   direitos: "© 2026 LhamaLog. Todos os direitos reservados.",
-  redes: "Redes sociais",
 };
 // Textos de apoio (tabela "Textos de apoio" da spec, aprovados)
 export const SUPPORT_TEXTS = {
   tituloRecursos: "Recursos",
-  tituloIntegracao: "Integração",
-  introIntegracao: "Configure o envio de logs por OpenTelemetry (OTLP) com o token do seu produto.",
   tituloPlanos: "Planos",
   introPlanos:
     "Escolha o plano e a periodicidade. A forma de pagamento você escolhe na hora de contratar.",

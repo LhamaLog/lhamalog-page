@@ -200,3 +200,11 @@ Fase 1 (Setup) → Fase 2 (PlansCatalog) → Fase 3 (seções) → Fase 4 (rota 
 - [x] T062b Tela de Ocorrências do bloco 1 no estilo do Figma (`OccurrencesMock.jsx`, barra lateral e lista)
 - [x] T062c Moldura do sistema (`SystemShell.jsx`) nas telas de sugestão por IA, dados mascarados e alertas
 - [ ] T062 PARADA 8: revisão do André
+
+## Fase 9: Correções da revisão do JP (2026-11-14)
+
+- [x] T063 Remover a seção "Integração" e o exemplo OTLP; ajustar a resposta 1 das perguntas frequentes (FR-006 removido)
+- [x] T064 Remover os ícones de redes sociais do rodapé (FR-027)
+- [x] T065 URL padrão https://app.lhamalog.com (FR-010, FR-019)
+- [x] T066 Renomear "Entrar" para "Acessar Página" (FR-001)
+- [ ] T067 Conferir no navegador, e só depois (com a autorização do André) commit e push na mesma branch do PR #2

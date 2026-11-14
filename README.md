@@ -1,9 +1,9 @@
 # lhamalog-page
 
-Landing page pública do LhamaLog: apresenta o produto, como funciona, os recursos, a integração por OpenTelemetry, os planos,
+Landing page pública do LhamaLog: apresenta o produto, como funciona, os recursos, os planos,
 as perguntas frequentes e leva ao cadastro no sistema (lhamalog-web).
 
-Seções: barra flutuante, topo com uma tela de exemplo, "Como funciona", recursos (4 blocos com telas de exemplo), integração (exemplo OTLP),
+Seções: barra flutuante, topo com uma janela de logs animada, "Como funciona", recursos (4 blocos com telas de exemplo),
 planos, perguntas frequentes, chamada final e rodapé. A especificação está em `specs/002-landing-page-publica/`
 (a nota `NOTA-ADAPTACAO.md` explica o que mudou ao trazer a landing para este repositório).
 
@@ -166,7 +166,7 @@ Copie `.env.example` para `.env.local` (ignorado pelo Git) e ajuste:
 
 | Variável | Para que serve |
 |---|---|
-| `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Entrar", "Começar grátis" e "Contratar" levam para lá. Vazio: "Entrar" e "Começar grátis" usam `/sign-in` e `/sign-up` deste site, e "Contratar" mostra "A contratação não está disponível no momento. Tente novamente mais tarde." |
+| `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Acessar Página", "Começar grátis" e "Contratar" levam para lá. Vazio: usa o padrão `https://app.lhamalog.com`. Só preencha para apontar para outro ambiente. |
 | `VITE_API_URL` | API do Core, de onde vem a lista pública de planos (`GET /api/v1/planos`). |
 | `VITE_USAR_DADOS_FALSOS` | Só em desenvolvimento: `true` mostra planos falsos sem o Core (o build de produção ignora). Variações pela URL: `?simular=vazio` e `?simular=erro`. |
 

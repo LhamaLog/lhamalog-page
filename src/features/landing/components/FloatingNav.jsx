@@ -4,9 +4,9 @@ import logo from "../../../shared/assets/lhamalog-logo.svg";
 import symbol from "../../../shared/assets/lhamalog-symbol.svg";
 import { NAV_ACTIONS, NAV_LINKS, SUPPORT_TEXTS } from "../content";
 import { landingNav } from "../landingTokens";
-// Barra flutuante e arredondada (FR-001). Em tela larga: logo, 4 links âncora, "Entrar" e "Começar grátis".
-// Abaixo de 1024 px (o 768 px da spec subiu porque os links maiores não cabem em uma linha antes disso): logo, "Entrar" (link compacto),
-// "Começar grátis" e um botão de menu só com os 4 links. O "Entrar" é um único elemento na barra, nunca repetido no menu.
+// Barra flutuante e arredondada (FR-001). Em tela larga: logo, 4 links âncora, "Acessar Página" e "Começar grátis".
+// Abaixo de 1024 px (o 768 px da spec subiu porque os links maiores não cabem em uma linha antes disso): logo, "Acessar Página" (link compacto),
+// "Começar grátis" e um botão de menu só com os 4 links. O "Acessar Página" é um único elemento na barra, nunca repetido no menu.
 // O menu abre e fecha pelo botão, fecha com Esc (devolvendo o foco ao botão) e ao escolher um link.
 export function FloatingNav() {
   const [open, setOpen] = useState(false);
@@ -29,7 +29,7 @@ export function FloatingNav() {
           aria-label={SUPPORT_TEXTS.navegacaoPrincipal}
           className="flex h-16 items-center justify-between gap-2 rounded-full border border-[#D2E1F6] bg-white/95 pl-3 pr-1.5 shadow-[0_8px_24px_-12px_rgba(8,59,122,0.35)] backdrop-blur min-[460px]:pl-4 min-[460px]:pr-2.5 sm:pl-6 sm:pr-3"
         >
-          {/* Abaixo de 460 px o logo largo não cabe ao lado de "Entrar", "Começar grátis" e do menu: entra só o símbolo da marca. */}
+          {/* Abaixo de 460 px o logo largo não cabe ao lado de "Acessar Página", "Começar grátis" e do menu: entra só o símbolo da marca. */}
           {/* Área de toque de pelo menos 44 x 44 px. O símbolo (24 px de largura) estende a área para os lados com margem negativa,
             para não ocupar mais espaço na barra estreita. */}
           <a

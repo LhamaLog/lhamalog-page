@@ -8,8 +8,8 @@ import {
   FOOTER,
   HERO,
   HOW_IT_WORKS,
+  NAV_ACTIONS,
   NAV_LINKS,
-  OTLP_EXAMPLE_LINES,
   SECTION_IDS,
   SUPPORT_TEXTS,
   LOG_LINES,
@@ -108,14 +108,6 @@ test('nenhum número além de "14", nenhum depoimento nem cliente nos textos da 
   }
 });
 
-test("exemplo OTLP usa só marcadores: sem endereço nem token reais (FR-006)", () => {
-  const example = OTLP_EXAMPLE_LINES.join("\n");
-  assert.ok(example.includes("<ENDEREÇO_DO_LHAMALOG>"));
-  assert.ok(example.includes("<TOKEN_DO_PRODUTO>"));
-  assert.ok(!/https?:\/\//.test(example));
-  assert.ok(!/Bearer (?!<)/.test(example));
-});
-
 // Topo com a tela de exemplo da IA (FR-002, FR-013, FR-020): conferido pelo código-fonte, sem biblioteca de teste de componente.
 const source = (path) =>
   readFileSync(new URL(`../src/features/landing/${path}`, import.meta.url), "utf8");
@@ -167,22 +159,7 @@ test("tela da IA: o topo e o bloco 2 usam dados fictícios diferentes, com o mes
   assert.ok(source("components/mocks/MockFrame.jsx").includes("SUPPORT_TEXTS.legendaTela"));
 });
 
-// Integração, perguntas, chamada final e rodapé (T025 a T028): conferidos pelo código-fonte.
-test("integração: usa o título e a introdução aprovados e o exemplo OTLP do content.ts, sem copiar texto (FR-006)", () => {
-  const code = source("components/IntegrationSection.jsx");
-  assert.ok(
-    code.includes("SUPPORT_TEXTS.tituloIntegracao") &&
-      code.includes("SUPPORT_TEXTS.introIntegracao"),
-  );
-  assert.ok(code.includes("OTLP_EXAMPLE_LINES.map"));
-  assert.ok(/<pre[\s\S]*<code/.test(code), "falta o bloco <pre><code>");
-  assert.ok(
-    !code.includes("overflow-x"),
-    "o código deve quebrar a linha dentro do bloco, sem rolagem lateral",
-  );
-  assert.ok(!/https?:\/\//.test(code) && !/Bearer/.test(code), "endereço ou token no componente");
-});
-
+// Perguntas, chamada final e rodapé: conferidos pelo código-fonte.
 test('perguntas: <details>/<summary> nativos para as 5 perguntas, id "perguntas", nenhuma aberta no início (FR-008, FR-013)', () => {
   const code = source("components/Faq.jsx");
   assert.ok(
@@ -218,24 +195,9 @@ test("rodapé: Termos e Política sem endereço viram texto simples, sem \"em br
   assert.ok(code.includes("bg-[#141826]") && code.includes("FOOTER.direitos"));
 });
 
-test("rodapé: redes num ponto único; só o GitHub tem endereço; sem endereço, ícone com nome para leitor de tela (FR-027)", async () => {
-  const { SOCIAL_LINKS } = await import("../src/features/landing/socialLinks.js");
-  assert.deepEqual(
-    SOCIAL_LINKS.map((item) => item.rede),
-    ["GitHub", "LinkedIn", "X", "YouTube", "Instagram", "Facebook"],
-  );
-  assert.equal(SOCIAL_LINKS.find((item) => item.rede === "GitHub").href, "https://github.com/LhamaLog");
-  assert.ok(SOCIAL_LINKS.filter((item) => item.rede !== "GitHub").every((item) => item.href === null));
-  const code = source("components/Footer.jsx");
-  assert.ok(code.includes('role="img" aria-label={rede}') && code.includes("aria-label={rede}"));
-  assert.ok(/h-11 w-auto/.test(code), "logo do rodapé com pelo menos 44 px");
-  assert.ok(code.includes("lhamalog-logo-escuro.svg"), "logo do rodapé na versão para fundo escuro");
-  assert.equal((code.match(/border-t /g) || []).length, 1, "o rodapé tem uma só linha divisória");
-});
-
-test("a página monta integração, perguntas, chamada final e rodapé depois dos recursos (T025 a T028)", () => {
+test("a página monta perguntas, chamada final e rodapé depois dos recursos (T026 a T028)", () => {
   const page = source("LandingPage.jsx");
-  const order = ["<IntegrationSection />", "<Faq />", "<FinalCta />", "<Footer />"].map((tag) =>
+  const order = ["<Faq />", "<FinalCta />", "<Footer />"].map((tag) =>
     page.indexOf(tag),
   );
   assert.ok(
@@ -272,4 +234,25 @@ test("janela dos logs: botão de pausar com os rótulos aprovados, fora da área
   assert.ok(code.lastIndexOf('aria-hidden="true">') < code.indexOf("<button"), "o botão deve ficar fora do conteúdo escondido");
   assert.ok(code.includes("clearTimeout") && code.includes("IntersectionObserver"));
   assert.ok(!/(^|[\s"`])transition-(\[|opacity|colors)/.test(code.replaceAll("motion-safe:transition-", "")), "transição fora do motion-safe");
+});
+
+// Correções da revisão do JP (2026-11-14): sem seção de integração, sem ícones de redes, botão "Acessar Página" e URL padrão.
+test("sem a seção de integração nem o exemplo OTLP (removidos na revisão do JP)", () => {
+  const page = source("LandingPage.jsx");
+  assert.ok(!page.includes("IntegrationSection") && !page.includes('id="integracao"'));
+  assert.ok(!SUPPORT_TEXTS.tituloIntegracao && !SUPPORT_TEXTS.introIntegracao);
+  assert.ok(!spec.includes("Configure o envio de logs por OpenTelemetry (OTLP) com o token do seu produto.") || spec.includes("removid"));
+  assert.ok(!FAQ.some((item) => item.resposta.includes("seção de integração")), "a resposta cita uma seção que não existe");
+});
+
+test("rodapé sem ícones de redes sociais", () => {
+  const code = source("components/Footer.jsx");
+  assert.ok(!/SocialIcon|SOCIAL_LINKS|socialLinks/.test(code));
+  assert.ok(!("redes" in FOOTER));
+});
+
+test('a ação da barra se chama "Acessar Página", ao lado de "Começar grátis"', () => {
+  assert.equal(NAV_ACTIONS.entrar, "Acessar Página");
+  assert.equal(NAV_ACTIONS.comecarGratis, "Começar grátis");
+  inSpec("Acessar Página");
 });

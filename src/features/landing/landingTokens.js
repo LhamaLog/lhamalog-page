@@ -106,7 +106,7 @@ export const LANDING_CONTRAST_PAIRS = [
   },
   { nome: "link da barra", texto: "#0B1B3A", fundo: LANDING_COLORS.white },
   {
-    nome: 'link "Entrar" compacto da barra (abaixo de 1024 px)',
+    nome: 'link "Acessar Página" compacto da barra (abaixo de 1024 px)',
     texto: LANDING_COLORS.action,
     fundo: LANDING_COLORS.white,
   },

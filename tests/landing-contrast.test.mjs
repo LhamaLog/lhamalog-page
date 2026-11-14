@@ -45,7 +45,7 @@ test("a função de contraste confere valores conhecidos (preto sobre branco = 2
   assert.ok(Math.abs(contrast("#000000", "#FFFFFF") - 21) < 0.01);
 });
 
-// Azul dos botões unificado na paleta da marca (#0D65D9, hover #0B57BD): "Contratar" dos cards de /planos, botões cheios e "Entrar" compacto da landing.
+// Azul dos botões unificado na paleta da marca (#0D65D9, hover #0B57BD): "Contratar" dos cards de /planos, botões cheios e "Acessar Página" compacto da landing.
 import { readFileSync } from "node:fs";
 const plansTokens = readFileSync(
   new URL("../src/features/subscription/screens/public/publicPlansTokens.js", import.meta.url),
@@ -67,12 +67,12 @@ test('"Contratar" de /planos usa o azul #0D65D9 da paleta (hover #0B57BD) (FR-01
   assert.ok(contrast("#FFFFFF", "#0B57BD") >= 5);
 });
 
-test('o "Entrar" compacto da landing usa o azul #0D65D9, com contraste de pelo menos 5:1 sobre branco', () => {
+test('o "Acessar Página" compacto da landing usa o azul #0D65D9, com contraste de pelo menos 5:1 sobre branco', () => {
   const entrar = landingTokens
     .split("\n")
     .find((row) => row.includes("lg:border-2 lg:border-[#0C70F2]"));
   assert.ok(entrar.includes("text-[#0D65D9]"), "texto do Entrar compacto fora do azul da paleta");
-  const pair = LANDING_CONTRAST_PAIRS.find((item) => item.nome.includes('"Entrar" compacto'));
+  const pair = LANDING_CONTRAST_PAIRS.find((item) => item.nome.includes('"Acessar Página" compacto'));
   assert.equal(pair.texto.toUpperCase(), "#0D65D9");
   assert.ok(contrast(pair.texto, pair.fundo) >= 5);
 });

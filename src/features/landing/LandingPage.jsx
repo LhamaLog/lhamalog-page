@@ -12,7 +12,6 @@ import { FloatingNav } from "./components/FloatingNav";
 import { Footer } from "./components/Footer";
 import { Hero } from "./components/Hero";
 import { HowItWorks } from "./components/HowItWorks";
-import { IntegrationSection } from "./components/IntegrationSection";
 import { AiSuggestionMock } from "./components/mocks/AiSuggestionMock";
 import { AlertsMock } from "./components/mocks/AlertsMock";
 import { MaskedDataMock } from "./components/mocks/MaskedDataMock";
@@ -28,9 +27,8 @@ const SCREENS = {
   "dados-mascarados": <MaskedDataMock />,
   alertas: <AlertsMock />,
 };
-// Landing page pública: barra, topo, "Como funciona", recursos, integração, planos, perguntas, chamada final e rodapé.
-// Fundos alternados: branco (Como funciona), azul bem claro
-// (recursos), branco (integração), [azul bem claro: planos], branco (perguntas), azul-marinho (chamada final), branco (rodapé).
+// Landing page pública: barra, topo, "Como funciona", recursos, planos, perguntas, chamada final e rodapé.
+// Fundos alternados (FR-026): branco (Como funciona), cinza (recursos), cinza (planos), branco (perguntas), escuro (chamada final e rodapé).
 export function LandingPage() {
   return (
     <div className="min-h-dvh bg-white text-[#141826]" style={{ fontFamily: FONT }}>
@@ -61,7 +59,6 @@ export function LandingPage() {
             </div>
           </div>
         </section>
-        <IntegrationSection />
         <PlansSection />
         <Faq />
         <FinalCta />

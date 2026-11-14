@@ -130,6 +130,17 @@ Feitas na cópia do `lhamalog-page` (JavaScript, sem Clerk e sem React Router; v
 | `components/SocialIcons.jsx` (NOVO) | Ícones em SVG próprio (sem pacote de ícones) |
 | `Footer.jsx`, `content.js`, `legalLinks.js` | Rodapé escuro: logo maior, redes, "©", Termos e Política como texto simples; `FOOTER.emBreve` sai |
 
+## Mudanças de 2026-11-14 (correções da revisão do JP)
+
+| Arquivo | O que muda |
+|---|---|
+| `components/IntegrationSection.jsx` | Removido, com o exemplo OTLP e os textos da seção em `content.js` (FR-006) |
+| `components/SocialIcons.jsx`, `socialLinks.js` | Removidos; o `Footer.jsx` fica só com logo, "©", Termos e Política (FR-027) |
+| `content.js` | `NAV_ACTIONS.entrar` = "Acessar Página"; resposta 1 das perguntas sem a frase da seção de integração |
+| `src/shared/appLinks.js` | `DEFAULT_APP_URL` = https://app.lhamalog.com; `VITE_APP_URL` só sobrescreve (FR-010, FR-019) |
+| `.env.example`, `README.md` | Descrição da URL padrão; sem integração nem redes |
+| `tests/` | Testes das seções removidas viram testes de ausência; novo teste da URL padrão e do botão "Acessar Página" |
+
 ## Complexity Tracking
 
 | Mudança | Por que é necessária | Alternativa mais simples rejeitada porque |
