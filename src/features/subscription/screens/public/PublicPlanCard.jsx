@@ -1,6 +1,5 @@
 import { signUpUrl } from "../../../../shared/appLinks";
 import { formatBRL, periodSuffix, planItems, planPrice, semestralSavings } from "../../format";
-import { isTrialAvailable } from "../../subscriptionRules";
 import { publicButton, publicCard } from "./publicPlansTokens";
 const DESCRIPTIONS = {
   FREE: "Para conhecer o LhamaLog",
@@ -40,14 +39,12 @@ function PriceText({ cents, className }) {
   );
 }
 // Cartão de plano da página pública. Cinco linhas alinhadas entre todos os cartões (grade com subgrade):
-// cabeçalho, preço, botão, selo do teste, lista e nota. O recomendado (Pro) fica em azul escuro da marca (#033473).
+// cabeçalho, preço, botão, lista e nota. O recomendado (Pro) fica em azul escuro da marca (#033473).
 // O preço mostrado é o do Pix (o boleto custa o mesmo); cartão e débito custam um pouco mais e a pessoa escolhe ao contratar.
 export function PublicPlanCard({ plan, previous, period, recommended, onSubscribe }) {
   const price = planPrice(plan, period, "PIX");
   const overage = plan.precoGbExcedenteCentavos?.PIX;
   const free = price === null;
-  // Selo do teste só quando ele vale (Starter ou Pro, mensal, cartão): FR-022, T029.
-  const trial = isTrialAvailable(plan, period, "CARTAO");
   const { title, items } = planItems(plan, previous, period);
   const savings = period === "SEMESTRAL" ? semestralSavings(plan) : null;
   const titleId = `plano-${plan.codigo}`;
@@ -132,16 +129,7 @@ export function PublicPlanCard({ plan, previous, period, recommended, onSubscrib
         )}
       </div>
 
-      {/* Linha reservada para o selo do teste (só quando há colunas lado a lado): as listas começam na mesma altura em todos os cartões. */}
-      <div className={`${trial ? "flex" : "hidden sm:flex"} items-center pt-3 sm:min-h-10`}>
-        {trial && (
-          <span className={`inline-flex rounded-full px-3 py-1 text-sm font-medium ${theme.trial}`}>
-            Teste grátis de {plan.testeGratisDias} dias
-          </span>
-        )}
-      </div>
-
-      <div className={`mt-2 border-t pt-5 ${theme.divider}`}>
+      <div className={`mt-5 border-t pt-5 ${theme.divider}`}>
         <p className={`mb-3.5 text-sm font-semibold ${theme.muted}`}>{title}</p>
         <ul className={`space-y-3 text-[15px] font-medium leading-snug ${theme.item}`}>
           {items.map((item) => (

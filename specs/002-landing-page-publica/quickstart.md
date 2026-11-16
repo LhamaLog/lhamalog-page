@@ -12,7 +12,7 @@ Guia de verificação. Não traz código; os detalhes de cada item estão em [pl
 
 | # | O que fazer | Resultado esperado | Cobre |
 |---|---|---|---|
-| 1 | Abrir `/` | Barra flutuante, topo com o título e o subtítulo exatos da spec, linha "Plano grátis · Teste de 14 dias nos planos Starter e Pro mensais" | FR-001, FR-002 |
+| 1 | Abrir `/` | Barra flutuante, topo com o título e o subtítulo exatos da spec, linha "Plano grátis" | FR-001, FR-002 |
 | 2 | Rolar a página inteira | 3 cards, 4 blocos alternando o lado, exemplo OTLP, planos, perguntas, chamada final e rodapé, nessa ordem | FR-004 a FR-009 |
 | 3 | Clicar em cada link da barra e em "Ver planos" | Rola até a seção; o título não fica atrás da barra | FR-011 |
 | 4 | Trocar a periodicidade na landing e em `/planos` | Mesmos valores, mesmo destaque do Pro. A parte "mudança em um só lugar" do SC-007 é garantida pela estrutura (T005 e T006: as duas páginas usam o mesmo componente e o mesmo hook de planos) e conferida por leitura | FR-007, SC-007 |

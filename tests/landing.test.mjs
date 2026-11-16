@@ -39,7 +39,7 @@ test("topo: título, subtítulo e linha de oferta iguais à spec (FR-002)", () =
   inSpec(HERO.titulo);
   inSpec(HERO.subtitulo);
   inSpec(HERO.oferta);
-  assert.equal(HERO.oferta, "Plano grátis · Teste de 14 dias nos planos Starter e Pro mensais");
+  assert.equal(HERO.oferta, "Plano grátis");
 });
 
 test("Como funciona: 3 cards com os textos da spec (FR-004)", () => {
@@ -108,9 +108,9 @@ test("links legais começam desativados, com endereço nulo (FR-009)", () => {
   assert.equal(FOOTER.direitos, "© 2026 LhamaLog. Todos os direitos reservados.");
 });
 
-test('nenhum número além de "14", nenhum depoimento nem cliente nos textos da página (FR-016, SC-008)', () => {
+test("nenhum número, depoimento ou cliente nos textos da página, fora o ano do rodapé (FR-016, FR-027, SC-008)", () => {
   for (const text of pageStrings()) {
-    const semExcecoes = text.replaceAll("14", "").replace(FOOTER.direitos, "");
+    const semExcecoes = text.replace(FOOTER.direitos, "");
     assert.ok(!/\d/.test(semExcecoes), `número inesperado: ${text}`);
     assert.ok(!/depoiment|cliente/i.test(text), `depoimento ou cliente: ${text}`);
   }

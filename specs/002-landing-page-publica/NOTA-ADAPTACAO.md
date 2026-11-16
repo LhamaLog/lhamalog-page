@@ -13,7 +13,7 @@ O que mudou em relação aos documentos:
 | Links internos (`/sign-in`, `/sign-up`) com React Router | Links comuns para o sistema pelo endereço `VITE_APP_URL` (`src/shared/appLinks.js`) |
 | FR-019: "Contratar" só aceita destino do mesmo site | O site agora é outro: "Contratar" só monta o endereço com o app configurado em `VITE_APP_URL` (http ou https); sem ele, mostra a mensagem de indisponível |
 | Lista de planos pela API do Core com o token da Clerk | Pela API pública do Core, sem login (`VITE_API_URL`), ou por dados falsos em desenvolvimento |
-| Seção de planos ainda não feita (T029 a T031) | **Feita aqui**: `PlansSection.jsx` entre a integração e as perguntas, e o selo "Teste grátis de 14 dias" só aparece quando vale (Starter ou Pro, mensal, cartão; FR-022) |
+| Seção de planos ainda não feita (T029 a T031) | **Feita aqui**: `PlansSection.jsx` entre a integração e as perguntas. Os cartões não informam teste grátis (FR-022) |
 
 ## Mudanças de 12/11/2026 (nesta cópia)
 

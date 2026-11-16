@@ -179,8 +179,8 @@ npm test
 npm run build
 ```
 
-`npm test` roda os testes de `tests/` com `node --test`: textos iguais aos aprovados na spec, contraste das cores, endereços dos botões
-e o selo do teste grátis. `npm run build` gera a página em `dist/` (não é o modo de início em desenvolvimento).
+`npm test` roda os testes de `tests/` com `node --test`: textos iguais aos aprovados na spec, contraste das cores e endereços dos botões.
+`npm run build` gera a página em `dist/` (não é o modo de início em desenvolvimento).
 
 ## Layout
 

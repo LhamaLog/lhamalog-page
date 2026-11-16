@@ -21,7 +21,7 @@ export const publicButton = {
 };
 // Cartões: duas "roupas" (comum e destaque). Todas as classes de cor de cada uma ficam juntas.
 export const publicCard = {
-  base: "relative grid row-span-6 grid-rows-subgrid gap-y-0 rounded-2xl border-2 p-6 2xl:p-7",
+  base: "relative grid row-span-5 grid-rows-subgrid gap-y-0 rounded-2xl border-2 p-6 2xl:p-7",
   plain: {
     surface:
       "border-[#D2E1F6] bg-white text-[#141826] shadow-[0_1px_2px_rgba(8,59,122,0.05),0_8px_20px_-10px_rgba(8,59,122,0.12)] motion-safe:transition-[transform,box-shadow] motion-safe:duration-200 motion-safe:hover:-translate-y-0.5 motion-safe:hover:shadow-[0_2px_4px_rgba(8,59,122,0.06),0_16px_30px_-12px_rgba(8,59,122,0.22)]",
@@ -33,7 +33,6 @@ export const publicCard = {
     divider: "border-[#D2E1F6]",
     item: "text-[#141826]",
     check: "bg-[#D7F6EA] text-[#0E8F5C]",
-    trial: "bg-[#D7F6EA] text-[#0B5F3F]",
     chip: "bg-[#DCEBFF] text-[#033473]",
   },
   featured: {
@@ -47,7 +46,6 @@ export const publicCard = {
     divider: "border-white/20",
     item: "text-white",
     check: "bg-white/15 text-[#8FF0C4]",
-    trial: "bg-white/15 text-[#B6F5D8]",
     chip: "bg-white/15 text-white",
   },
 };

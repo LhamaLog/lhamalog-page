@@ -47,7 +47,7 @@ Entra em `.env.example` com comentário; o valor real é do André/da equipe.
 - Animações só com `motion-safe`.
 - Nenhuma imagem de terceiros; nenhum número de clientes, logo de cliente, depoimento ou resultado.
 
-## Selo do teste e legenda das telas
+## Cartões e legenda das telas
 
-- O selo "Teste grátis de 14 dias" do `PublicPlanCard` aparece só quando `isTrialAvailable(plan, period, 'CARTAO')` é verdadeiro; vale para `/planos` e para a landing (FR-022).
+- O `PublicPlanCard` não informa teste grátis, nem na landing nem em `/planos` (FR-022).
 - Cada tela de exemplo traz a legenda visível "Exemplo ilustrativo" (FR-020).

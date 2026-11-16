@@ -17,7 +17,7 @@ export const HERO = {
     "O LhamaLog recebe os logs da sua aplicação por OpenTelemetry, agrupa os erros em ocorrências, mascara dados sensíveis, sugere a causa com IA e avisa a equipe certa.",
   botaoPrincipal: "Começar grátis",
   botaoSecundario: "Ver planos",
-  oferta: "Plano grátis · Teste de 14 dias nos planos Starter e Pro mensais",
+  oferta: "Plano grátis",
 };
 // Como funciona (FR-004)
 export const HOW_IT_WORKS = {
@@ -87,7 +87,7 @@ export const FAQ = [
   {
     pergunta: "Quais formas de pagamento posso usar?",
     resposta:
-      "Cartão de crédito, cartão de débito, Pix e boleto. Você escolhe a forma na hora de contratar. O teste de 14 dias vale nos planos Starter e Pro mensais, pagando com cartão de crédito.",
+      "Cartão de crédito, cartão de débito, Pix e boleto. Você escolhe a forma na hora de contratar.",
   },
 ];
 // Chamada final (FR-009)

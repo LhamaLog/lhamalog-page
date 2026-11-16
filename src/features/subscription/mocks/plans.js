@@ -34,7 +34,6 @@ export function fakePlans() {
       chamadasIaMes: 10,
       membrosIncluidos: 1,
       produtosIncluidos: 1,
-      testeGratisDias: null,
     },
     {
       codigo: "STARTER",
@@ -50,7 +49,6 @@ export function fakePlans() {
       chamadasIaMes: 100,
       membrosIncluidos: 3,
       produtosIncluidos: 3,
-      testeGratisDias: 14,
     },
     {
       codigo: "PRO",
@@ -66,7 +64,6 @@ export function fakePlans() {
       chamadasIaMes: 1000,
       membrosIncluidos: 10,
       produtosIncluidos: 10,
-      testeGratisDias: 14,
     },
     {
       codigo: "BUSINESS",
@@ -82,7 +79,6 @@ export function fakePlans() {
       chamadasIaMes: 5000,
       membrosIncluidos: 25,
       produtosIncluidos: null,
-      testeGratisDias: null,
     },
     {
       codigo: "ENTERPRISE",
@@ -98,7 +94,6 @@ export function fakePlans() {
       chamadasIaMes: 15000,
       membrosIncluidos: null,
       produtosIncluidos: null,
-      testeGratisDias: null,
     },
   ];
 }

@@ -64,8 +64,8 @@
 - [x] CHK035 **[Achado]** `plan.md` (tabela de gates) e `data-model.md` ainda dizem que as perguntas frequentes são "rascunho a aprovar", mas a spec já tem os 5 textos aprovados. A mesma frase precisa valer nos dois. [Conflict, Plan §Constitution Check / Data-model §Pergunta frequente]
 - [x] CHK036 **[Achado]** A spec diz "cadastro ou login" para o "Contratar" (FR-010, US3 cenário 3); o plano fixa sempre `/sign-up`. A escolha está escrita como requisito ou só no plano? [Conflict, Spec §FR-010 / Plan §research 2]
 - [x] CHK037 **[Achado]** O plano cria a regra "recusar endereço de outro domínio" e a legenda "Exemplo ilustrativo" nas telas montadas; nenhuma das duas está na spec. Cada regra do plano tem origem na spec? [Traceability, Plan §research 2 e 7]
-- [x] CHK038 **[Achado]** O destaque "Teste grátis de 14 dias" do card (reaproveitado de `/planos`) aparece pelo plano, sem olhar a periodicidade; a spec e as perguntas frequentes dizem "Starter e Pro mensais". O card pode contradizer a página no semestral e no semanal. [Conflict, Spec §FR-002, §FR-007, §FR-008]
-- [ ] CHK039 O texto fixo "14 dias" (topo, perguntas) e o valor que o Core manda no plano (`testeGratisDias`) têm regra de qual vale se divergirem? [Consistency, Spec §FR-002 / Plan §Summary]
+- [x] CHK038 **[Resolvido]** Os cartões de plano não informam teste grátis, nem na landing nem em `/planos`. [Spec §FR-022]
+- [x] CHK039 A página não informa prazo de teste. [Spec §FR-002, §FR-008, §FR-022]
 - [ ] CHK040 O destino de quem está logado (`/empresa`) é o mesmo "dentro do sistema" da spec e do `/planos` (`/assinatura/planos`)? A spec não escolhe; o plano escolhe `/empresa`. [Assumption, Spec §FR-010 / Plan §research 3]
 - [x] CHK041 O plano não cita nenhuma meta do projeto, e a spec só permite metas marcadas como "meta". As duas posições estão registradas de forma que não se contradizem? [Consistency, Spec §FR-016 / Plan §research 12]
 

@@ -75,9 +75,9 @@ Nenhum item ficou como NEEDS CLARIFICATION. As decisões abaixo foram tiradas da
 
 - **Decision**: testar com `node --test` apenas lógica pura: `contractLink` (casos válidos, variável ausente, destino de outro domínio, codificação), `legalLinks` (nulo → desativado), e `content` (textos exatos da spec, sem dígitos de "clientes", sem a palavra "depoimento"). Telas: `tsc` + build + roteiro manual nas 4 larguras + checagem de contraste por script.
 
-## 14. Selo "Teste grátis de 14 dias" (FR-022)
+## 14. Cartões sem teste grátis (FR-022)
 
-- **Decision**: o `PublicPlanCard` mostra o selo só quando `isTrialAvailable(plan, period, 'CARTAO')` (já existe em `src/features/subscription/subscriptionRules.ts`: `testeGratisDias === 14`, periodicidade mensal e cartão) for verdadeiro. A mudança vale para `/planos` e para a landing, porque os dois usam o mesmo card. O espaço reservado para o selo (linha de altura mínima nas colunas lado a lado) continua, para as listas não se desalinharem.
-- **Rationale**: decisão do André (checklist CHK038): sem isso o card mostrava o selo em semanal e semestral, contradizendo a linha do topo e a resposta das perguntas frequentes ("Starter e Pro mensais"). O cartão é a única forma que dá o teste; o preço mostrado no card continua sendo o do Pix.
-- **Alternatives**: manter o selo como estava (rejeitado pelo André); esconder o selo só na landing (rejeitado: deixaria as duas páginas diferentes).
-- **Prova**: teste em `tests/landing.test.mjs` com a tabela de verdade de `isTrialAvailable` e uma checagem de que `PublicPlanCard.tsx` chama `isTrialAvailable` (não decide o selo por `testeGratisDias !== null`).
+- **Decision**: o `PublicPlanCard` não informa teste grátis, nem na landing nem em `/planos`.
+- **Rationale**: a página não oferece teste grátis. O preço mostrado no card continua sendo o do Pix.
+- **Alternatives**: mostrar um selo só em alguns planos (rejeitado: a página não informa isso).
+- **Prova**: `tests/links.test.mjs` confere que `PublicPlanCard.jsx` não contém esse texto.

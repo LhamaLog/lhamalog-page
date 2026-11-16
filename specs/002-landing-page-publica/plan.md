@@ -6,7 +6,7 @@
 
 ## Summary
 
-Criar a landing page pública na rota `/` com 8 seções estáticas (barra flutuante, topo, "Como funciona", 4 blocos de recursos com telas montadas em HTML/CSS, integração OTLP, planos, perguntas frequentes, chamada final e rodapé). A seção de planos **reaproveita** o que `/planos` já tem: o hook `usePlans`, o seletor de periodicidade, o `PublicPlanCard` e o `format.ts`. Para isso, a grade de planos de `PublicPlansPage` é extraída para um componente compartilhado (`PlansCatalog`), usado pelas duas páginas, e a regra de preço continua só no Core/mocks. "Contratar" monta o endereço de retorno com plano e periodicidade e leva ao cadastro (quem já tem conta entra pelo link da própria tela de cadastro); o destino do fluxo de contratar vem de variável de ambiente e só é aceito se for do mesmo site. O selo "Teste grátis de 14 dias" do card passa a aparecer só quando `isTrialAvailable` é verdadeiro (Starter ou Pro, mensal, cartão), na landing e em `/planos`. Quem está logado e abre `/` vai para `/empresa` (comportamento atual de `/`). Termos e Política ficam desativados com "em breve", com os endereços em uma constante única. Nada de pacote novo, nada em Clerk, nada de Git.
+Criar a landing page pública na rota `/` com 8 seções estáticas (barra flutuante, topo, "Como funciona", 4 blocos de recursos com telas montadas em HTML/CSS, integração OTLP, planos, perguntas frequentes, chamada final e rodapé). A seção de planos **reaproveita** o que `/planos` já tem: o hook `usePlans`, o seletor de periodicidade, o `PublicPlanCard` e o `format.ts`. Para isso, a grade de planos de `PublicPlansPage` é extraída para um componente compartilhado (`PlansCatalog`), usado pelas duas páginas, e a regra de preço continua só no Core/mocks. "Contratar" monta o endereço de retorno com plano e periodicidade e leva ao cadastro (quem já tem conta entra pelo link da própria tela de cadastro); o destino do fluxo de contratar vem de variável de ambiente e só é aceito se for do mesmo site. Os cartões de plano não informam teste grátis, nem na landing nem em `/planos`. Quem está logado e abre `/` vai para `/empresa` (comportamento atual de `/`). Termos e Política ficam desativados com "em breve", com os endereços em uma constante única. Nada de pacote novo, nada em Clerk, nada de Git.
 
 ## Technical Context
 
@@ -91,9 +91,9 @@ src/
 │   └── subscription/screens/public/
 │       ├── PlansCatalog.tsx                     # NOVO: seletor + estados + grade (extraído de PublicPlansPage)
 │       ├── PublicPlansPage.tsx                  # EDITA: passa a usar PlansCatalog (mesmo resultado na tela)
-│       └── PublicPlanCard.tsx                   # EDITA: selo do teste só com isTrialAvailable (FR-022)
+│       └── PublicPlanCard.tsx                   # EDITA: sem informação de teste grátis (FR-022)
 .env.example                                     # EDITA: VITE_CONTRATAR_URL
-tests/landing.test.mjs                           # NOVO: contractLink, legalLinks, content, selo do teste
+tests/landing.test.mjs                           # NOVO: contractLink, legalLinks, content
 tests/landing-contrast.test.mjs                  # NOVO: contraste dos pares de cor da landing
 specs/002-landing-page-publica/baseline/          # NOVO: cópias "antes" de /planos e registro do comportamento
 specs/002-landing-page-publica/quickstart-resultados.md  # NOVO: resultado de cada cenário do quickstart
@@ -146,4 +146,4 @@ Feitas na cópia do `lhamalog-page` (JavaScript, sem Clerk e sem React Router; v
 | Mudança | Por que é necessária | Alternativa mais simples rejeitada porque |
 |---|---|---|
 | Extrair `PlansCatalog` de `PublicPlansPage` (arquivo existente de `/planos`) | RF07 exige reaproveitar cards e seletor "sem duplicar regra"; hoje a grade, o seletor e os estados vivem dentro da página | Copiar a grade para a landing duplicaria o destaque do Pro, os estados de carregando/erro/vazio e a regra de 1/2/3/5 colunas; qualquer ajuste em `/planos` deixaria de valer na landing |
-| Restringir o selo do teste no `PublicPlanCard` (arquivo existente de `/planos`), usando `isTrialAvailable` | FR-022 (decisão do André, CHK038): o selo só vale em Starter/Pro mensal no cartão; hoje aparece em qualquer periodicidade | Esconder o selo só na landing deixaria `/planos` e a landing diferentes e a regra duplicada |
+| Tirar a informação de teste grátis do `PublicPlanCard` (arquivo existente de `/planos`) | FR-022: a página não informa teste grátis, nem na landing nem em `/planos` | Deixar o texto só na landing deixaria as duas páginas diferentes |

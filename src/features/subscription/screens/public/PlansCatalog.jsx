@@ -43,7 +43,7 @@ export function PlansCatalog({ state, onSubscribe, initialPeriod = "MENSAL", hea
       )}
 
       {!loading && !error && data && data.planos.length > 0 && (
-        // 5 colunas só em tela muito larga; cada cartão ocupa 6 linhas da grade (subgrade), por isso ficam alinhados.
+        // 5 colunas só em tela muito larga; cada cartão ocupa 5 linhas da grade (subgrade), por isso ficam alinhados.
         <div className="grid grid-cols-1 items-stretch gap-x-5 gap-y-8 pt-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {data.planos.map((plan, index) => (
             <PublicPlanCard

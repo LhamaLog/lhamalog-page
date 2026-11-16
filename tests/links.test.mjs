@@ -2,7 +2,6 @@ import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import { contractUrl, DEFAULT_APP_URL, signInUrl, signUpUrl } from "../src/shared/appLinks.js";
-import { isTrialAvailable } from "../src/features/subscription/subscriptionRules.js";
 
 const APP = "https://app.exemplo.com";
 
@@ -36,19 +35,12 @@ test("Contratar sem app configurado, com endereço inválido ou dado estranho fi
   assert.equal(contractUrl("pro<script>", "MENSAL", APP), null);
 });
 
-test("selo do teste grátis só em Starter ou Pro, mensal, no cartão (FR-022)", () => {
-  const pro = { testeGratisDias: 14 };
-  const business = { testeGratisDias: null };
-  assert.equal(isTrialAvailable(pro, "MENSAL", "CARTAO"), true);
-  assert.equal(isTrialAvailable(pro, "SEMANAL", "CARTAO"), false);
-  assert.equal(isTrialAvailable(pro, "SEMESTRAL", "CARTAO"), false);
-  assert.equal(isTrialAvailable(pro, "MENSAL", "PIX"), false);
-  assert.equal(isTrialAvailable(business, "MENSAL", "CARTAO"), false);
+test("os cartões de plano não informam teste grátis", () => {
   const card = readFileSync(
     new URL("../src/features/subscription/screens/public/PublicPlanCard.jsx", import.meta.url),
     "utf8",
   );
-  assert.ok(card.includes('isTrialAvailable(plan, period, "CARTAO")') && card.includes("{trial && ("));
+  assert.equal(/teste grátis|teste de 14|testeGratis|isTrialAvailable/i.test(card), false);
 });
 
 test("a seção de planos fica entre os recursos e as perguntas (FR-007, T030)", () => {
