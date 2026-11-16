@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { contractUrl } from "../../../shared/appLinks";
+import wordmark from "../../../shared/assets/lhamalog-wordmark.png";
 import { usePlans } from "../../subscription/hooks/usePlans";
 import { PlansCatalog } from "../../subscription/screens/public/PlansCatalog";
 import { SUPPORT_TEXTS } from "../content";
@@ -25,11 +26,22 @@ export function PlansSection() {
           state={state}
           onSubscribe={subscribe}
           header={
-            <div className="space-y-3">
-              <h2 id="planos-titulo" className={landingText.sectionTitle}>
-                {SUPPORT_TEXTS.tituloPlanos}
-              </h2>
-              <p className={landingText.sectionIntro}>{SUPPORT_TEXTS.introPlanos}</p>
+            <div className="space-y-4">
+              <img
+                src={wordmark}
+                alt=""
+                width={762}
+                height={180}
+                className="mx-auto h-10 w-auto sm:h-12"
+              />
+              <div className="space-y-3">
+                <h2 id="planos-titulo" className={landingText.sectionTitle}>
+                  {SUPPORT_TEXTS.tituloPlanos}
+                </h2>
+                <p className={`${landingText.sectionIntro} mx-auto max-w-3xl`}>
+                  {SUPPORT_TEXTS.introPlanos}
+                </p>
+              </div>
             </div>
           }
           notice={

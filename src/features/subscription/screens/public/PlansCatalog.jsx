@@ -2,6 +2,7 @@ import { useState } from "react";
 import { EmptyState } from "../../../../shared/ui/EmptyState";
 import { ErrorState } from "../../../../shared/ui/ErrorState";
 import { LoadingState } from "../../../../shared/ui/LoadingState";
+import { maxSemestralDiscountPercent } from "../../format";
 import { PeriodSelector } from "../shared/PeriodSelector";
 import { PublicPlanCard } from "./PublicPlanCard";
 // Plano em destaque: o André decidiu manter o Pro (05/11); o PO confirma depois. O Core ainda não manda esta informação.
@@ -12,11 +13,21 @@ const RECOMMENDED_PLAN = "PRO";
 export function PlansCatalog({ state, onSubscribe, initialPeriod = "MENSAL", header, notice }) {
   const { data, error, loading, reload } = state;
   const [period, setPeriod] = useState(initialPeriod);
+  const maxOff = !loading && data ? maxSemestralDiscountPercent(data.planos) : 0;
+  const hints = maxOff >= 1 ? { SEMESTRAL: `até ${maxOff}% de desconto` } : undefined;
   return (
     <>
       <div className="space-y-5 text-center">
         {header}
-        <PeriodSelector value={period} onChange={setPeriod} hideLegend center size="lg" />
+        <PeriodSelector
+          value={period}
+          onChange={setPeriod}
+          hideLegend
+          center
+          size="lg"
+          variant="segmented"
+          hints={hints}
+        />
       </div>
 
       {notice}
@@ -33,7 +44,7 @@ export function PlansCatalog({ state, onSubscribe, initialPeriod = "MENSAL", hea
 
       {!loading && !error && data && data.planos.length > 0 && (
         // 5 colunas só em tela muito larga; cada cartão ocupa 6 linhas da grade (subgrade), por isso ficam alinhados.
-        <div className="grid grid-cols-1 gap-x-6 gap-y-8 pt-4 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
+        <div className="grid grid-cols-1 items-stretch gap-x-5 gap-y-8 pt-8 sm:grid-cols-2 lg:grid-cols-3 2xl:grid-cols-5">
           {data.planos.map((plan, index) => (
             <PublicPlanCard
               key={plan.codigo}
