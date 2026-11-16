@@ -1,0 +1,10 @@
+@import 'tailwindcss';
+
+/* Rolagem suave nos links âncora da landing, só para quem não pediu redução de movimento (FR-011, FR-015). */
+@layer base {
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
