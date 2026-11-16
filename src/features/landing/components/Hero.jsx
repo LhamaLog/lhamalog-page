@@ -12,7 +12,7 @@ import { LogStreamMock } from "./mocks/LogStreamMock";
 // degradê termina em branco, para emendar com a seção seguinte. Os brilhos não têm animação.
 export function Hero() {
   return (
-    <section className="relative overflow-hidden bg-gradient-to-b from-white via-[#EEF5FF] to-[#DCEBFF] pb-16 pt-32 sm:pb-24 sm:pt-40 lg:pt-36">
+    <section className="relative overflow-hidden bg-gradient-to-b from-white via-[#EEF5FF] to-[#DCEBFF] pb-16 pt-40 sm:pb-24 sm:pt-44 lg:pt-36">
       <div aria-hidden="true" className="pointer-events-none absolute inset-0">
         <div className="absolute -left-24 top-16 h-72 w-72 rounded-full bg-[#0C70F2]/20 blur-3xl sm:-left-10 sm:h-96 sm:w-96" />
         <div className="absolute -right-24 top-32 h-80 w-80 rounded-full bg-[#033473]/10 blur-3xl sm:-right-10 sm:h-[28rem] sm:w-[28rem]" />

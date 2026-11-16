@@ -64,6 +64,14 @@ test("recursos: 4 blocos com os textos da spec, alternando o lado da tela (FR-00
   assert.ok(!FEATURES[0].texto.includes("milhares"));
 });
 
+test("recursos: a pessoa escolhe um recurso e vê o contexto com a tela do sistema (FR-005)", () => {
+  const code = source("components/ResourcesSection.jsx");
+  assert.ok(code.includes('id="recursos"') && code.includes("aria-pressed") && code.includes("FEATURES.map"));
+  assert.ok(code.includes("feature.titulo") && code.includes("feature.texto"));
+  assert.ok(code.includes("screens[feature.id]") && code.includes("screens[current.id]"));
+  assert.ok(source("LandingPage.jsx").includes("<ResourcesSection"));
+});
+
 test("perguntas frequentes: 5 perguntas e respostas iguais à spec (FR-008)", () => {
   assert.equal(FAQ.length, 5);
   for (const item of FAQ) {

@@ -150,6 +150,12 @@ export const LANDING_CONTRAST_PAIRS = [
   { nome: "rodapé: links e ícones com link", texto: LANDING_COLORS.white, fundo: LANDING_COLORS.logBg },
   { nome: "rodapé: ícone sobre o círculo claro (#1F2331)", texto: "#CBD5E1", fundo: "#1F2331" },
   { nome: "parágrafo sobre o fundo de seção", texto: LANDING_COLORS.ink, fundo: LANDING_COLORS.section },
+  { nome: "economia do semestral sobre cartão branco", texto: "#0B5F3F", fundo: "#FFFFFF" },
+  { nome: "economia do semestral sobre o cartão em destaque", texto: "#B6F5D8", fundo: "#033473" },
+  { nome: "selo de desconto da periodicidade", texto: "#0B5F3F", fundo: "#D7F6EA" },
+  { nome: "ícone do recurso selecionado", texto: "#FFFFFF", fundo: "#0D65D9" },
+  { nome: "ícone do recurso", texto: "#033473", fundo: "#EEF5FF" },
+  { nome: "selo Recomendado", texto: "#FFFFFF", fundo: "#0D65D9" },
 ];
 // Botões: mesma altura (48 px), borda de 2 px e raio do /planos, mas com largura própria (o do /planos é w-full, feito para o cartão).
 // Animação discreta (FR-025): com o mouse em cima sobe 2 px, escurece e ganha sombra; ao clicar afunda 1 px. Só `transform` e sombra
@@ -169,7 +175,7 @@ export const landingText = {
 };
 // Seção: margem de rolagem maior que a barra flutuante, para o título não ficar atrás dela (FR-011).
 export const landingSection = {
-  anchor: "scroll-mt-28",
+  anchor: "scroll-mt-40 sm:scroll-mt-32 lg:scroll-mt-28",
   container: "mx-auto w-full max-w-[1280px] px-4 sm:px-8",
   wideContainer: "mx-auto w-full max-w-[1600px] px-4 sm:px-8",
   spacing: "py-16 sm:py-24",
@@ -185,11 +191,12 @@ const navButtonBase =
   "h-11 min-h-11 cursor-pointer items-center justify-center rounded-full border-2 px-2 text-sm font-semibold leading-none whitespace-nowrap min-[460px]:px-3 sm:px-5 motion-safe:transition-[color,background-color,border-color,box-shadow,transform] motion-safe:duration-150 motion-safe:ease-out motion-safe:hover:-translate-y-0.5 motion-safe:active:translate-y-px hover:shadow-[0_10px_20px_-12px_rgba(13,101,217,0.7)] active:shadow-none focus-visible:outline-2 focus-visible:outline-offset-2";
 export const landingNav = {
   primary: `inline-flex ${navButtonBase} border-transparent bg-[#0D65D9] text-white hover:bg-[#0B57BD] focus-visible:outline-[#0C70F2]`,
-  // "Entrar": um só elemento na barra. Abaixo de 1024 px é link compacto (azul de ação, negrito, sublinhado ao passar o mouse,
-  // 44 px de altura para o toque); de 1024 px em diante vira o botão de contorno azul. Azul #0D65D9 sobre branco = 5,41:1.
+  // "Acessar Página": abaixo de 640 px fica na segunda linha da barra; de 640 px em diante, na mesma linha do logo.
+  // Há duas cópias no código e só uma fica visível (a outra usa display:none). De 1024 px em diante vira o botão de contorno.
+  // Azul #0D65D9 sobre branco = 5,41:1.
   entrar:
-    "inline-flex h-11 min-h-11 shrink-0 cursor-pointer items-center justify-center rounded-full px-1 text-sm font-bold leading-none whitespace-nowrap text-[#0D65D9] min-[460px]:px-2 underline-offset-4 hover:underline motion-safe:transition-[color,background-color,border-color] motion-safe:duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C70F2] lg:border-2 lg:border-[#0C70F2] lg:bg-white lg:px-5 lg:font-semibold lg:text-[#0D65D9] lg:hover:bg-[#EEF5FF] lg:hover:no-underline",
-  link: "inline-flex min-h-11 items-center rounded-full px-3 text-base font-medium text-[#0B1B3A] hover:bg-[#EEF5FF] hover:text-[#0D65D9] lg:text-[17px] motion-safe:transition-[color,background-color,border-color] motion-safe:duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C70F2]",
+    "inline-flex h-11 min-h-11 shrink-0 cursor-pointer items-center justify-center rounded-full px-1 text-sm font-bold leading-none whitespace-nowrap text-[#0D65D9] min-[460px]:px-2 underline-offset-4 hover:underline motion-safe:transition-[color,background-color,border-color] motion-safe:duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C70F2] lg:border-2 lg:border-[#0C70F2] lg:bg-white lg:px-3 lg:font-semibold lg:text-[#0D65D9] lg:hover:bg-[#EEF5FF] lg:hover:no-underline xl:px-5",
+  link: "inline-flex min-h-11 items-center whitespace-nowrap rounded-full px-2 text-base font-medium text-[#0B1B3A] hover:bg-[#EEF5FF] hover:text-[#0D65D9] xl:px-3 xl:text-[17px] motion-safe:transition-[color,background-color,border-color] motion-safe:duration-150 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#0C70F2]",
 };
 // Etiquetas das telas de exemplo (ocorrências, IA, alertas). Pares texto/fundo conferidos em LANDING_CONTRAST_PAIRS.
 export const landingBadge = {

@@ -6,6 +6,8 @@ export function PeriodSelector({
   hideLegend = false,
   center = false,
   size = "md",
+  variant = "default",
+  hints,
 }) {
   return (
     <OptionSelector
@@ -16,6 +18,8 @@ export function PeriodSelector({
       hideLegend={hideLegend}
       center={center}
       size={size}
+      variant={variant}
+      hints={hints}
     />
   );
 }

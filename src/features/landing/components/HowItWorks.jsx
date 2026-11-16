@@ -1,3 +1,4 @@
+import mark from "../../../shared/assets/lhamalog-mark.png";
 import { HOW_IT_WORKS } from "../content";
 import { landingCard, landingSection, landingText } from "../landingTokens";
 // Como funciona (FR-004): 3 cards. Âncora #como-funciona com margem de rolagem maior que a barra (FR-011).
@@ -9,9 +10,12 @@ export function HowItWorks() {
       className={`${landingSection.anchor} ${landingSection.spacing} bg-white`}
     >
       <div className={landingSection.container}>
-        <h2 id="como-funciona-titulo" className={`${landingText.sectionTitle} text-center`}>
-          {HOW_IT_WORKS.titulo}
-        </h2>
+        <div className="flex flex-col items-center gap-4">
+          <img src={mark} alt="" width={273} height={360} className="h-12 w-auto sm:h-14" />
+          <h2 id="como-funciona-titulo" className={`${landingText.sectionTitle} text-center`}>
+            {HOW_IT_WORKS.titulo}
+          </h2>
+        </div>
         <ol className="mt-10 grid gap-6 md:grid-cols-3">
           {HOW_IT_WORKS.cards.map((card, index) => (
             <li

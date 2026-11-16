@@ -31,6 +31,25 @@ export function periodSuffix(period) {
 export function planPrice(plan, period, method) {
   return plan.precos?.[period]?.[method] ?? null;
 }
+// Diferença entre 6 mensalidades e o semestral, no mesmo meio de pagamento que o card mostra (Pix).
+// Não cria preço: os dois valores já são públicos. Sem preço, ou se o semestral não fica mais barato, devolve null.
+export function semestralSavings(plan, method = "PIX") {
+  const monthly = planPrice(plan, "MENSAL", method);
+  const semestral = planPrice(plan, "SEMESTRAL", method);
+  if (monthly == null || semestral == null) return null;
+  const full = monthly * 6;
+  const saved = full - semestral;
+  if (saved <= 0) return null;
+  return { full, saved, percent: Math.floor((saved * 100) / full) };
+}
+export function maxSemestralDiscountPercent(plans, method = "PIX") {
+  let max = 0;
+  for (const plan of plans ?? []) {
+    const savings = semestralSavings(plan, method);
+    if (savings && savings.percent > max) max = savings.percent;
+  }
+  return max;
+}
 const FEATURES = {
   SUGESTOES_BASICAS: "Sugestões básicas",
   SUGESTOES_IA: "Sugestões por IA",
