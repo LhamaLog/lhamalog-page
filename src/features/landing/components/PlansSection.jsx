@@ -1,5 +1,5 @@
-import { useEffect, useState } from "react";
-import { contractUrl } from "../../../shared/appLinks";
+import { useEffect, useRef, useState } from "react";
+import { criarTravaClique, destinoContratacao } from "../../subscription/checkout";
 import wordmark from "../../../shared/assets/lhamalog-wordmark.png";
 import { usePlans } from "../../subscription/hooks/usePlans";
 import { PlansCatalog } from "../../subscription/screens/public/PlansCatalog";
@@ -43,14 +43,39 @@ function AjusteDev({ catalogo, onSaved }) {
 }
 
 // Seção de planos: os mesmos cartões e o mesmo seletor, sem duplicar regra de preço.
-// "Contratar" leva ao cadastro no app com o plano e a periodicidade escolhidos; sem o app configurado, mostra "indisponível".
+// "Contratar" pede o checkout à própria página e, se ele abrir, vai ao Asaas. Sem checkout, mostra "indisponível".
 export function PlansSection() {
   const state = usePlans();
   const [unavailable, setUnavailable] = useState(false);
+  const trava = useRef(criarTravaClique());
+  useEffect(() => {
+    const aoMostrar = (evento) => {
+      if (evento.persisted) trava.current.liberar();
+    };
+    window.addEventListener("pageshow", aoMostrar);
+    return () => window.removeEventListener("pageshow", aoMostrar);
+  }, []);
   const subscribe = (plan, period) => {
-    const url = contractUrl(plan.codigo, period);
-    if (url) window.location.assign(url);
-    else setUnavailable(true);
+    if (!trava.current.ocupar()) return;
+    fetch("/api/contratacao", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plano: plan.codigo, periodo: period }),
+    })
+      .then(async (resposta) => ({ status: resposta.status, corpo: await resposta.json().catch(() => ({})) }))
+      .then(({ status, corpo }) => {
+        const destino = destinoContratacao(status, corpo);
+        if (destino.tipo === "navegar") {
+          window.location.assign(destino.url);
+          return;
+        }
+        trava.current.liberar();
+        setUnavailable(true);
+      })
+      .catch(() => {
+        trava.current.liberar();
+        setUnavailable(true);
+      });
   };
   return (
     <section

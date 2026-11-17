@@ -2,6 +2,7 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { planosDevPlugin } from "./vite.planos.js";
+import { checkoutPlugin } from "./vite.checkout.js";
 
 const allowedHosts = [
   process.env.RAILWAY_PUBLIC_DOMAIN,
@@ -10,7 +11,7 @@ const allowedHosts = [
 ].filter(Boolean);
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), planosDevPlugin()],
+  plugins: [react(), tailwindcss(), planosDevPlugin(), checkoutPlugin()],
   define: {
     __LHAMALOG_AJUSTE_PLANOS__: JSON.stringify(process.env.LHAMALOG_AJUSTE_PLANOS === "1"),
   },

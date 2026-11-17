@@ -176,9 +176,11 @@ Copie `.env.example` para `.env.local` (ignorado pelo Git) e ajuste:
 
 | Variável | Para que serve |
 |---|---|
-| `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Acessar Página", "Começar grátis" e "Contratar" levam para lá. Vazio: usa o padrão `https://app.lhamalog.com`. Só preencha para apontar para outro ambiente. |
+| `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Acessar Página" e "Começar grátis" levam para lá. Vazio: usa o padrão `https://app.lhamalog.com`. Só preencha para apontar para outro ambiente. |
+| `ASAAS_BASE_URL` | Ambiente do checkout. Testes: `https://api-sandbox.asaas.com/v3`. Produção (`https://api.asaas.com/v3`) só depois do CNPJ. |
+| `ASAAS_API_KEY` | Chave do mesmo ambiente. Fica em `.env.local` ou no ambiente do container. O exemplo em `.env.example` não é uma chave utilizável. |
 
-"Contratar" leva a `<VITE_APP_URL>/sign-up?redirect_url=<VITE_APP_URL>/assinatura/contratar?plano=<PLANO>&periodo=<PERIODO>`.
+"Contratar", nos planos pagos, pede o checkout à própria página e abre a página de pagamento do Asaas. "Acessar Página" e "Começar grátis" continuam no app.
 
 ## Testes e build
 
@@ -201,9 +203,9 @@ src/features/landing/              landing: textos (content.js), cores (landingT
 src/features/subscription/         cartões e seletor de periodicidade; a oferta fica em public/planos.json
 src/shared/                        logo, endereços do app (appLinks.js) e estados (carregando, erro, vazio)
 tests/                             testes com node --test
-specs/                             Spec Kit: 001 (inicialização), 002 (landing), 003 (reformulação) e 004 (ajuste dos planos)
-vite.config.js                     servidor de desenvolvimento na porta 3000, React e Tailwind
-Dockerfile                         imagem Node 26
+specs/                             Spec Kit: 001 a 004 e 005 (checkout de assinatura no Asaas)
+vite.config.js                     Vite na porta 3000: desenvolvimento, preview e a rota de checkout
+Dockerfile                         imagem Node 26; gera a página e sobe o preview
 docker-compose.yml                 sobe só a página
 Makefile                           make run, make build, make docker
 ```
