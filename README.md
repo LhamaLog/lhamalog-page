@@ -110,7 +110,7 @@ Com o Docker em execução:
 make run
 ```
 
-O comando constrói a imagem `lhamalog-page` e sobe só a página, em desenvolvimento, na porta 3000. A primeira execução baixa a imagem do Node 26 e pode demorar. Não sobe banco, fila nem outra ferramenta.
+O comando constrói a imagem `lhamalog-page` e sobe a página já gerada, na porta 3000. Dentro da imagem roda `npm run build` e o servidor da pasta gerada. Não sobe o modo de desenvolvimento, então não há formulário de ajuste nem endereço de gravação. A primeira execução baixa a imagem do Node 26 e pode demorar. Não sobe banco, fila nem outra ferramenta.
 
 Abra [http://localhost:3000](http://localhost:3000). A landing page aparece completa.
 
@@ -140,7 +140,7 @@ npm install
 npm run dev
 ```
 
-A página abre no mesmo endereço, [http://localhost:3000](http://localhost:3000).
+A página abre no mesmo endereço, [http://localhost:3000](http://localhost:3000). Esse modo mostra a landing. O formulário de ajuste dos planos fica desligado até o comando da seção seguinte.
 
 ### Imagem
 
@@ -155,6 +155,16 @@ Sem make:
 ```bash
 docker build -t lhamalog-page .
 ```
+
+## Ajustar os planos
+
+A oferta publicada é o arquivo `public/planos.json`. O formulário que grava esse arquivo só existe na máquina de quem mantém a página, e só quando a variável está ligada:
+
+```bash
+LHAMALOG_AJUSTE_PLANOS=1 npm run dev
+```
+
+Abra [http://localhost:3000/#ajustar-planos](http://localhost:3000/#ajustar-planos), altere a oferta e salve. O arquivo muda no disco. Faça o commit de `public/planos.json` e publique de novo (`npm run build`, ou a imagem). Sem a variável, `npm run dev` mostra a landing e não aceita gravação. A imagem Docker e o `npm run preview` também não aceitam.
 
 ## Porta ocupada
 
@@ -193,7 +203,7 @@ src/features/landing/              landing: textos (content.js), cores (landingT
 src/features/subscription/         cartões e seletor de periodicidade; a oferta fica em public/planos.json
 src/shared/                        logo, endereços do app (appLinks.js) e estados (carregando, erro, vazio)
 tests/                             testes com node --test
-specs/                             Spec Kit: 001 (inicialização) e 002 (landing page)
+specs/                             Spec Kit: 001 (inicialização), 002 (landing), 003 (reformulação) e 004 (ajuste dos planos)
 vite.config.js                     servidor de desenvolvimento na porta 3000, React e Tailwind
 Dockerfile                         imagem Node 26
 docker-compose.yml                 sobe só a página

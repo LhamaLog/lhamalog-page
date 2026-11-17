@@ -8,6 +8,8 @@
 
 **Input**: User description: "Reformular totalmente a landing page. A implementação atual está falha e desorganizada. Criar do zero uma página nova, de tela única, parecida no desenho com a página atual, com código novo e simples. Não criar backend. Não integrar o Asaas nesta fase. Não inventar dados: informações do projeto e planos só com o que estiver documentado. Em dúvida, o Drive prevalece sobre as outras fontes; se ainda houver dúvida, consultar o solicitante. Aceites: a página apresenta o projeto, contém as informações do projeto e contém os planos documentados no Drive."
 
+> Nota de 2026-11-17: os planos citados aqui passaram a ser lidos de `public/planos.json`. O ajuste dessa oferta está em `specs/004-ajuste-planos-local/spec.md`.
+
 ## User Scenarios & Testing *(mandatory)*
 
 ### User Story 1 - Entender o que é o LhamaLog (Priority: P1)

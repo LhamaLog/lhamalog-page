@@ -10,7 +10,7 @@
 
 A oferta de planos deixa de morar em `src/features/subscription/mocks/plans.js` e passa a ser um único arquivo, `public/planos.json`, que acompanha a página. A seção de planos busca esse arquivo. Nome, descrição, selo, plano recomendado, preços e limites vêm dele. O desenho dos cartões e o endereço de "Contratar" permanecem.
 
-Quem roda a página na própria máquina (`npm run dev` ou `make run`, aberto em localhost) vê o formulário em `/#ajustar-planos`. Salvar grava o mesmo JSON, depois de uma validação única. O site gerado por `npm run build` não contém o formulário nem o endereço de gravação. Um visitante em lhamalog.com não altera o catálogo.
+Quem roda a página na própria máquina com `LHAMALOG_AJUSTE_PLANOS=1 npm run dev`, aberto em localhost, vê o formulário em `/#ajustar-planos`. Salvar grava o mesmo JSON, depois de uma validação única. A imagem e o `npm run preview` servem o resultado de `npm run build` (`dist/`). Esse modo não sobe o servidor de desenvolvimento, então não contém o formulário nem o endereço de gravação. Sem a variável, nem o `npm run dev` registra a gravação.
 
 ## Technical Context
 
@@ -28,7 +28,7 @@ Quem roda a página na própria máquina (`npm run dev` ou `make run`, aberto em
 
 **Performance Goals**: um arquivo pequeno, lido uma vez ao abrir a seção. O restante da landing não espera essa leitura para aparecer.
 
-**Constraints**: formulário e gravação só no servidor de desenvolvimento e só com o navegador em localhost, 127.0.0.1 ou ::1; códigos enviados em "Contratar" continuam `FREE`, `STARTER`, `PRO`, `BUSINESS`, `ENTERPRISE`; boleto igual ao Pix; desconto semestral calculado, não digitado; cartões sem aviso de teste grátis; sem pacote novo; sem serviço externo.
+**Constraints**: a imagem publica o `dist/` com `vite preview`, sem `configureServer`; a gravação só existe com `LHAMALOG_AJUSTE_PLANOS=1` no `npm run dev`, com `Content-Type: application/json`, origem local e `Sec-Fetch-Site` ausente ou `same-origin`; códigos enviados em "Contratar" continuam `FREE`, `STARTER`, `PRO`, `BUSINESS`, `ENTERPRISE`; boleto igual ao Pix; desconto semestral calculado, não digitado; cartões sem aviso de teste grátis; sem pacote novo; sem serviço externo.
 
 **Scale/Scope**: 5 planos fixos, 1 arquivo de catálogo, 1 formulário local, 1 validação compartilhada. Não inclui nem remove plano.
 

@@ -34,7 +34,7 @@ Esperado: a landing abre com os cinco planos iguais à oferta de hoje (Pro em de
 
 ## 3. Ajuste no ambiente local
 
-Suba `npm run dev` e abra `http://localhost:3000/#ajustar-planos`.
+Suba `LHAMALOG_AJUSTE_PLANOS=1 npm run dev` e abra `http://localhost:3000/#ajustar-planos`. Sem a variável, o mesmo comando não mostra o formulário e não grava.
 
 Esperado: o formulário lista os cinco planos. Altere o nome, o preço mensal no Pix e a franquia de um plano pago, com um valor de duas casas, e salve.
 

@@ -1,4 +1,5 @@
-# Ambiente local do lhamalog-page (somente desenvolvimento).
+# Sobe a página já gerada pela imagem (o mesmo modo da publicação).
+# Não é o ajuste de planos: esse fica na máquina, com LHAMALOG_AJUSTE_PLANOS=1 npm run dev.
 # Uso (na raiz do repositório): docker compose up --build
 #   ou: make run
 name: lhamalog-page-local
@@ -13,6 +14,3 @@ services:
     restart: "no"
     ports:
       - "3000:3000"
-    volumes:
-      - .:/app
-      - /app/node_modules

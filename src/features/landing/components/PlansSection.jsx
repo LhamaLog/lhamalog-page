@@ -115,7 +115,9 @@ export function PlansSection() {
             ) : null
           }
         />
-        {import.meta.env.DEV ? <AjusteDev catalogo={state.data} onSaved={state.reload} /> : null}
+        {import.meta.env.DEV && __LHAMALOG_AJUSTE_PLANOS__ ? (
+          <AjusteDev catalogo={state.data} onSaved={state.reload} />
+        ) : null}
       </div>
     </section>
   );
