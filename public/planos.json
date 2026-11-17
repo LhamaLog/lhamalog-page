@@ -1,0 +1,244 @@
+{
+  "moeda": "BRL",
+  "planos": [
+    {
+      "codigo": "FREE",
+      "nome": "Free",
+      "descricao": "Para conhecer o LhamaLog",
+      "selo": "Para começar",
+      "recomendado": false,
+      "precos": null,
+      "franquiaGb": 1,
+      "franquiaPor": {
+        "SEMANAL": "MES",
+        "MENSAL": "MES",
+        "SEMESTRAL": "MES"
+      },
+      "precoGbExcedenteCentavos": null,
+      "precoArmazenamentoExtraCentavos": null,
+      "retencaoDias": 7,
+      "dashboard": "BASICO",
+      "recursosAnalise": [
+        "SUGESTOES_BASICAS"
+      ],
+      "chamadasIaMes": 10,
+      "membrosIncluidos": 1,
+      "produtosIncluidos": 1
+    },
+    {
+      "codigo": "STARTER",
+      "nome": "Starter",
+      "descricao": "Para um time pequeno com poucos produtos",
+      "selo": "Mais acessível",
+      "recomendado": false,
+      "precos": {
+        "SEMANAL": {
+          "PIX": 2023,
+          "BOLETO": 2023,
+          "CARTAO": 1930,
+          "DEBITO": 1894
+        },
+        "MENSAL": {
+          "PIX": 8099,
+          "BOLETO": 8099,
+          "CARTAO": 8195,
+          "DEBITO": 8088
+        },
+        "SEMESTRAL": {
+          "PIX": 47599,
+          "BOLETO": 47599,
+          "CARTAO": 48912,
+          "DEBITO": 48349
+        }
+      },
+      "franquiaGb": 10,
+      "franquiaPor": {
+        "SEMANAL": "SEMANA",
+        "MENSAL": "MES",
+        "SEMESTRAL": "MES"
+      },
+      "precoGbExcedenteCentavos": {
+        "PIX": 600,
+        "BOLETO": 600,
+        "CARTAO": 619,
+        "DEBITO": 612
+      },
+      "precoArmazenamentoExtraCentavos": {
+        "PIX": 10,
+        "BOLETO": 10,
+        "CARTAO": 11,
+        "DEBITO": 11
+      },
+      "retencaoDias": 15,
+      "dashboard": "PADRAO",
+      "recursosAnalise": [
+        "SUGESTOES_IA"
+      ],
+      "chamadasIaMes": 100,
+      "membrosIncluidos": 3,
+      "produtosIncluidos": 3
+    },
+    {
+      "codigo": "PRO",
+      "nome": "Pro",
+      "descricao": "Para times que dependem dos logs todo dia",
+      "selo": null,
+      "recomendado": true,
+      "precos": {
+        "SEMANAL": {
+          "PIX": 9407,
+          "BOLETO": 9407,
+          "CARTAO": 9542,
+          "DEBITO": 9421
+        },
+        "MENSAL": {
+          "PIX": 40099,
+          "BOLETO": 40099,
+          "CARTAO": 41181,
+          "DEBITO": 40705
+        },
+        "SEMESTRAL": {
+          "PIX": 239599,
+          "BOLETO": 239599,
+          "CARTAO": 246830,
+          "DEBITO": 244048
+        }
+      },
+      "franquiaGb": 100,
+      "franquiaPor": {
+        "SEMANAL": "SEMANA",
+        "MENSAL": "MES",
+        "SEMESTRAL": "MES"
+      },
+      "precoGbExcedenteCentavos": {
+        "PIX": 450,
+        "BOLETO": 450,
+        "CARTAO": 464,
+        "DEBITO": 459
+      },
+      "precoArmazenamentoExtraCentavos": {
+        "PIX": 10,
+        "BOLETO": 10,
+        "CARTAO": 11,
+        "DEBITO": 11
+      },
+      "retencaoDias": 30,
+      "dashboard": "PADRAO",
+      "recursosAnalise": [
+        "DETECCAO_ANOMALIAS",
+        "SUGESTOES_IA"
+      ],
+      "chamadasIaMes": 1000,
+      "membrosIncluidos": 10,
+      "produtosIncluidos": 10
+    },
+    {
+      "codigo": "BUSINESS",
+      "nome": "Business",
+      "descricao": "Para empresas com vários produtos",
+      "selo": "Mais capacidade",
+      "recomendado": false,
+      "precos": {
+        "SEMANAL": {
+          "PIX": 34584,
+          "BOLETO": 34584,
+          "CARTAO": 35495,
+          "DEBITO": 35083
+        },
+        "MENSAL": {
+          "PIX": 149199,
+          "BOLETO": 149199,
+          "CARTAO": 153643,
+          "DEBITO": 151907
+        },
+        "SEMESTRAL": {
+          "PIX": 894199,
+          "BOLETO": 894199,
+          "CARTAO": 921605,
+          "DEBITO": 911258
+        }
+      },
+      "franquiaGb": 500,
+      "franquiaPor": {
+        "SEMANAL": "SEMANA",
+        "MENSAL": "MES",
+        "SEMESTRAL": "MES"
+      },
+      "precoGbExcedenteCentavos": {
+        "PIX": 350,
+        "BOLETO": 350,
+        "CARTAO": 361,
+        "DEBITO": 357
+      },
+      "precoArmazenamentoExtraCentavos": {
+        "PIX": 10,
+        "BOLETO": 10,
+        "CARTAO": 11,
+        "DEBITO": 11
+      },
+      "retencaoDias": 90,
+      "dashboard": "PADRAO",
+      "recursosAnalise": [
+        "INVESTIGACAO_AUTOMATICA",
+        "DETECCAO_ANOMALIAS"
+      ],
+      "chamadasIaMes": 5000,
+      "membrosIncluidos": 25,
+      "produtosIncluidos": null
+    },
+    {
+      "codigo": "ENTERPRISE",
+      "nome": "Enterprise",
+      "descricao": "Para operações grandes e personalizadas",
+      "selo": "Mais completo",
+      "recomendado": false,
+      "precos": {
+        "SEMANAL": {
+          "PIX": 62276,
+          "BOLETO": 62276,
+          "CARTAO": 64041,
+          "DEBITO": 63309
+        },
+        "MENSAL": {
+          "PIX": 269199,
+          "BOLETO": 269199,
+          "CARTAO": 277342,
+          "DEBITO": 274218
+        },
+        "SEMESTRAL": {
+          "PIX": 1614199,
+          "BOLETO": 1614199,
+          "CARTAO": 1663797,
+          "DEBITO": 1645128
+        }
+      },
+      "franquiaGb": 1000,
+      "franquiaPor": {
+        "SEMANAL": "SEMANA",
+        "MENSAL": "MES",
+        "SEMESTRAL": "MES"
+      },
+      "precoGbExcedenteCentavos": {
+        "PIX": 280,
+        "BOLETO": 280,
+        "CARTAO": 289,
+        "DEBITO": 286
+      },
+      "precoArmazenamentoExtraCentavos": {
+        "PIX": 10,
+        "BOLETO": 10,
+        "CARTAO": 11,
+        "DEBITO": 11
+      },
+      "retencaoDias": 90,
+      "dashboard": "PERSONALIZADO",
+      "recursosAnalise": [
+        "INVESTIGACAO_AUTOMATICA",
+        "RASTREIO_USUARIO"
+      ],
+      "chamadasIaMes": 15000,
+      "membrosIncluidos": null,
+      "produtosIncluidos": null
+    }
+  ]
+}
