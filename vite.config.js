@@ -8,7 +8,11 @@ export default defineConfig({
     port: 3000,
     strictPort: true,
     host: true,
-    allowedHosts: [process.env.RAILWAY_PUBLIC_DOMAIN].filter(Boolean),
+    allowedHosts: [
+      process.env.RAILWAY_PUBLIC_DOMAIN,
+      "lhamalog.com",
+      "www.lhamalog.com",
+    ].filter(Boolean),
     watch: {
       usePolling: true,
     },
