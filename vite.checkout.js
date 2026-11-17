@@ -1,18 +1,22 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import axios from "axios";
-import { loadEnv } from "vite";
 import { validateCatalog } from "./src/features/subscription/catalogo.js";
-import { montarPedido, urlDoCheckout } from "./src/features/subscription/checkout.js";
+import { lerEnvLiteral, montarPedido, urlDoCheckout } from "./src/features/subscription/checkout.js";
 
 const ARQUIVO = resolve("public/planos.json");
 const LIMITE = 100 * 1024;
 const ROTA = "/api/contratacao";
 
 function preencherAmbiente(mode) {
-  const arquivo = loadEnv(mode, process.cwd(), "");
+  const lidos = {};
+  for (const nome of [".env", ".env.local", `.env.${mode}`, `.env.${mode}.local`]) {
+    const caminho = resolve(nome);
+    if (!existsSync(caminho)) continue;
+    Object.assign(lidos, lerEnvLiteral(readFileSync(caminho, "utf8")));
+  }
   for (const nome of ["ASAAS_API_KEY", "ASAAS_BASE_URL"]) {
-    if (!process.env[nome] && arquivo[nome]) process.env[nome] = arquivo[nome];
+    if (!process.env[nome] && lidos[nome]) process.env[nome] = lidos[nome];
   }
 }
 

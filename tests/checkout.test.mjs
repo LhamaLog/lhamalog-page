@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { montarPedido, urlDoCheckout } from "../src/features/subscription/checkout.js";
+import { lerEnvLiteral, montarPedido, urlDoCheckout } from "../src/features/subscription/checkout.js";
 
 const catalogo = JSON.parse(readFileSync(new URL("../public/planos.json", import.meta.url), "utf8"));
 const PAGOS = ["STARTER", "PRO", "BUSINESS", "ENTERPRISE"];
@@ -90,6 +90,13 @@ test("o endereço segue o ambiente e só aceita id seguro", () => {
   for (const id of ["", "a/b", "a?b", "a&b"]) {
     assert.equal(urlDoCheckout("https://api-sandbox.asaas.com/v3", id).disponivel, false);
   }
+});
+
+test("a chave do Asaas que começa com $ permanece inteira", () => {
+  const vars = lerEnvLiteral("# comentario\nASAAS_API_KEY=$aact_hmlg_abc\nASAAS_BASE_URL=https://api-sandbox.asaas.com/v3\n");
+  assert.equal(vars.ASAAS_API_KEY, "$aact_hmlg_abc");
+  assert.equal(vars.ASAAS_BASE_URL, "https://api-sandbox.asaas.com/v3");
+  assert.equal(lerEnvLiteral('ASAAS_API_KEY="\\$aact_hmlg_xyz"').ASAAS_API_KEY, "$aact_hmlg_xyz");
 });
 
 test("plano grátis, período estranho, preço inválido ou nome vazio não montam pedido", () => {

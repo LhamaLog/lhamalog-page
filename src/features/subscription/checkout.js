@@ -11,6 +11,25 @@ const BASES = {
 
 const indisponivel = () => ({ disponivel: false });
 
+// Lê KEY=valor sem expandir $. A chave do Asaas começa com $aact_, e o leitor
+// comum do Vite apagaria esse trecho achando que é outra variável.
+export function lerEnvLiteral(texto) {
+  const vars = {};
+  for (const linha of String(texto ?? "").split("\n")) {
+    const limpa = linha.trim();
+    if (!limpa || limpa.startsWith("#") || !limpa.includes("=")) continue;
+    const corte = limpa.indexOf("=");
+    const nome = limpa.slice(0, corte).trim();
+    let valor = limpa.slice(corte + 1).trim();
+    if ((valor.startsWith('"') && valor.endsWith('"')) || (valor.startsWith("'") && valor.endsWith("'"))) {
+      valor = valor.slice(1, -1);
+    }
+    valor = valor.replace(/\\\$/g, "$");
+    if (nome) vars[nome] = valor;
+  }
+  return vars;
+}
+
 function texto(valor) {
   return typeof valor === "string" && valor.trim() !== "";
 }
