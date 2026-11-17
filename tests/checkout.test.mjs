@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { decidirAssinatura, documentoValido, lerEnvLiteral, montarPedido, urlDoCheckout } from "../src/features/subscription/checkout.js";
+import { lerEnvLiteral, montarPedido, urlDoCheckout } from "../src/features/subscription/checkout.js";
 
 const catalogo = JSON.parse(readFileSync(new URL("../public/planos.json", import.meta.url), "utf8"));
 const PAGOS = ["STARTER", "PRO", "BUSINESS", "ENTERPRISE"];
@@ -90,26 +90,6 @@ test("o endereço segue o ambiente e só aceita id seguro", () => {
   for (const id of ["", "a/b", "a?b", "a&b"]) {
     assert.equal(urlDoCheckout("https://api-sandbox.asaas.com/v3", id).disponivel, false);
   }
-});
-
-test("CPF e CNPJ válidos seguem; repetidos e curtos não", () => {
-  assert.equal(documentoValido("390.533.447-05"), "39053344705");
-  assert.equal(documentoValido("11.222.333/0001-81"), "11222333000181");
-  assert.equal(documentoValido("111.111.111-11"), null);
-  assert.equal(documentoValido("123"), null);
-  assert.equal(documentoValido(""), null);
-});
-
-test("assinatura ativa impede outro checkout e cliente sem assinatura é reutilizado", () => {
-  const clientes = [{ id: "cus_1", cpfCnpj: "39053344705" }];
-  assert.deepEqual(decidirAssinatura("390.533.447-05", [], []), { tipo: "novo", documento: "39053344705" });
-  assert.equal(decidirAssinatura("123", clientes, []).tipo, "documento");
-  assert.deepEqual(decidirAssinatura("39053344705", clientes, [{ status: "INACTIVE" }]), {
-    tipo: "existente",
-    documento: "39053344705",
-    customer: "cus_1",
-  });
-  assert.deepEqual(decidirAssinatura("39053344705", clientes, [{ status: "ACTIVE" }]), { tipo: "ativa" });
 });
 
 test("o retorno em localhost vira 127.0.0.1, que o Asaas aceita", () => {

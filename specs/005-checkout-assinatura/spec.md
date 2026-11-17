@@ -38,7 +38,7 @@ A pessoa paga na página do Asaas. A landing não pede número de cartão, docum
 
 **Acceptance Scenarios**:
 
-1. **Given** a página publicada, **When** o visitante percorre a landing e o que o navegador recebe, **Then** encontra um único campo de CPF ou CNPJ, não encontra campo de cartão, de telefone ou de endereço, e não encontra uma chave de acesso utilizável do Asaas.
+1. **Given** a página publicada, **When** o visitante percorre a landing e o que o navegador recebe, **Then** não encontra campo de cartão, de documento, de telefone ou de endereço, nem uma chave de acesso utilizável do Asaas.
 2. **Given** o projeto compartilhado, **When** uma pessoa da equipe procura a chave real de acesso, **Then** não a encontra. O exemplo que acompanha o projeto mostra quais configurações são necessárias e usa apenas valores de exemplo.
 3. **Given** o visitante foi à página de pagamento e voltou à landing, por ter pago, desistido ou fechado a página, **When** a landing carrega de novo, **Then** ela não confirma pagamento, não mostra plano ativo e a seção de planos segue igual à de quem nunca clicou em Contratar.
 4. **Given** a empresa ainda não tem CNPJ, **When** o visitante abre um checkout por esta página, **Then** a página de pagamento é a de testes do Asaas e nenhum dinheiro real é cobrado.
@@ -63,23 +63,6 @@ O acesso ao Asaas não está configurado, o catálogo do plano pago não tem pre
 
 ---
 
-### User Story 4 - Não abrir outra assinatura para o mesmo documento (Priority: P1)
-
-Antes de Contratar, a pessoa informa CPF ou CNPJ. Se esse documento já tem uma assinatura ativa no Asaas, a landing não abre outro checkout e explica que a assinatura já existe. Se o cliente existe e não tem assinatura ativa, o checkout reaproveita o cadastro dele. Se o documento ainda não existe, o checkout abre como um cliente novo.
-
-**Why this priority**: Cada clique criava um checkout novo. Pagar duas vezes gerava duas assinaturas da mesma pessoa.
-
-**Independent Test**: Informar um documento com assinatura ativa e clicar em Contratar: a página permanece na landing com o aviso de assinatura ativa. Informar um documento sem assinatura: o checkout abre. Informar um número inválido: o checkout não abre e o aviso pede um CPF ou CNPJ válido.
-
-**Acceptance Scenarios**:
-
-1. **Given** um CPF ou CNPJ com assinatura ativa no Asaas, **When** o visitante clica em Contratar num plano pago, **Then** permanece na landing, vê "Este CPF ou CNPJ já tem uma assinatura ativa." e nenhum checkout novo é criado.
-2. **Given** um documento que já é cliente e não tem assinatura ativa, **When** o visitante clica em Contratar, **Then** o checkout abre ligado a esse cliente.
-3. **Given** um documento que o Asaas ainda não conhece, **When** o visitante clica em Contratar, **Then** o checkout abre sem cliente prévio.
-4. **Given** o campo vazio, curto ou com dígitos verificadores errados, **When** o visitante clica em Contratar, **Then** vê "Informe um CPF ou CNPJ válido." e o checkout não abre.
-
----
-
 ### Edge Cases
 
 - Periodicidade trocada no seletor e, em seguida, Contratar: o checkout usa a periodicidade que está selecionada na hora do clique, não a anterior.
@@ -92,9 +75,6 @@ Antes de Contratar, a pessoa informa CPF ou CNPJ. Se esse documento já tem uma 
 - Catálogo da página ausente ou ilegível: a seção de planos continua tratando essa falha como já faz hoje; Contratar não inventa um plano.
 - Ambiente de testes no lugar do de produção, ou o contrário: o checkout segue o ambiente configurado. Enquanto não houver CNPJ, o configurado é o de testes.
 - Nome do plano longo: o item na página de pagamento ainda identifica o plano e a periodicidade dentro do limite de 30 caracteres.
-- CPF ou CNPJ com todos os dígitos iguais, com tamanho diferente de 11 ou 14, ou com verificador errado: o checkout não abre.
-- O mesmo documento com assinatura encerrada e nenhuma ativa: o checkout abre reutilizando o cliente.
-- A consulta ao Asaas falha antes de saber se a assinatura está ativa: o checkout não abre e a contratação fica indisponível.
 
 ## Requirements *(mandatory)*
 
@@ -104,23 +84,20 @@ Antes de Contratar, a pessoa informa CPF ou CNPJ. Se esse documento já tem uma 
 - **FR-002**: O valor do checkout MUST ser o preço de cartão de crédito do catálogo publicado da página, para aquele plano e aquela periodicidade. O checkout MUST NOT usar o preço de Pix, de débito nem de boleto. O preço que o cartão exibe MUST continuar sendo o do Pix.
 - **FR-003**: A periodicidade do checkout MUST ser a que está selecionada no seletor no momento do clique: semanal, mensal ou semestral. O plano MUST ser um dos planos pagos já publicados: Starter, Pro, Business ou Enterprise.
 - **FR-004**: O plano Free MUST NOT abrir checkout. "Começar grátis" e "Acessar Página" MUST continuar levando ao cadastro e ao acesso como hoje.
-- **FR-005**: A landing MUST pedir CPF ou CNPJ antes de abrir o checkout e MUST NOT pedir nem guardar número de cartão, telefone ou endereço. O pagamento MUST acontecer na página do Asaas. O documento MUST ser conferido pelos dígitos verificadores e MUST NOT ser gravado na landing.
+- **FR-005**: A landing MUST NOT pedir nem guardar número de cartão, documento, telefone ou endereço. O pagamento MUST acontecer na página do Asaas.
 - **FR-006**: A chave de acesso ao Asaas MUST NOT aparecer na página que o visitante recebe nem no histórico compartilhado do projeto. Um exemplo MUST acompanhar o projeto, listar as configurações necessárias para abrir o checkout e usar só valores de exemplo, sem chave utilizável.
 - **FR-007**: Enquanto a empresa não tiver CNPJ, o checkout aberto por esta página MUST usar o ambiente de testes do Asaas e MUST NOT cobrar dinheiro real. Com a empresa constituída e o ambiente de produção configurado, o mesmo Contratar MUST abrir o ambiente de produção.
 - **FR-008**: Voltar da página de pagamento para a landing MUST NOT ser tratado como pagamento confirmado. A landing MUST NOT informar que a assinatura está ativa nem alterar a seção de planos por causa dessa volta.
 - **FR-009**: O nome curto do item na página de pagamento MUST identificar o plano e a periodicidade e MUST ter no máximo 30 caracteres.
 - **FR-010**: Se a configuração de acesso estiver ausente, se o preço de cartão de crédito da combinação escolhida estiver ausente ou for inválido, ou se o Asaas não abrir o checkout, a landing MUST manter o visitante na página, MUST mostrar a mensagem de contratação indisponível que a página já usa e MUST NOT enviá-lo a app.lhamalog.com. O topo, "Como funciona", os recursos, as perguntas e a chamada final MUST continuar utilizáveis.
 - **FR-011**: Enquanto um checkout ainda está sendo aberto, um novo clique em Contratar MUST NOT abrir um segundo checkout.
-- **FR-012**: Os cartões, o seletor, os textos, os selos, a ordem dos planos e o preço de Pix exibido MUST permanecer os atuais. Esta entrega MUST NOT acrescentar seletor de forma de pagamento, formulário de cadastro nem aviso de teste grátis. A seção de planos MUST ter um único campo "CPF ou CNPJ", acima dos cartões.
+- **FR-012**: O desenho da página MUST permanecer o atual. Esta entrega MUST NOT mudar cartões, seletor, textos, selos, ordem dos planos nem o preço de Pix exibido. Esta entrega MUST NOT acrescentar seletor de forma de pagamento, formulário de cadastro nem aviso de teste grátis.
 - **FR-013**: Pix, débito, boleto, teste de 14 dias, ativação de conta, nota fiscal, reembolso, upgrade e cancelamento MUST NOT fazer parte desta entrega. O checkout de assinatura desta página é o de cartão de crédito.
-- **FR-014**: Com CPF ou CNPJ inválido, Contratar MUST NOT abrir checkout e MUST mostrar "Informe um CPF ou CNPJ válido."
-- **FR-015**: Se o documento já tem assinatura com status ativo no Asaas, Contratar MUST NOT criar outro checkout e MUST mostrar "Este CPF ou CNPJ já tem uma assinatura ativa." Se o cliente existe e não tem assinatura ativa, o checkout MUST reutilizar esse cliente. Se o documento ainda não é cliente, o checkout MUST abrir sem cliente prévio.
 
 ### Key Entities
 
 - **Plano publicado**: uma oferta da página, com código estável, nome, periodicidade selecionada e preço de cartão de crédito. A origem continua sendo o catálogo que a própria página já publica. O Free não tem preço e não gera checkout.
-- **Checkout de assinatura**: a página de pagamento do Asaas aberta para um plano pago, uma periodicidade e o preço de cartão de crédito correspondente. Identifica o plano e a periodicidade. Pode apontar para um cliente já existente. Não é, por si, a confirmação do pagamento.
-- **Documento do contratante**: CPF de 11 dígitos ou CNPJ de 14, só para localizar o cliente no Asaas antes do checkout. Não fica gravado na landing.
+- **Checkout de assinatura**: a página de pagamento do Asaas aberta para um plano pago, uma periodicidade e o preço de cartão de crédito correspondente. Identifica o plano e a periodicidade. Não é, por si, a confirmação do pagamento.
 - **Configuração de acesso**: o ambiente do Asaas (testes ou produção) e a chave que permite abrir o checkout. A chave real fica fora do histórico compartilhado. O exemplo descreve essas configurações sem valor utilizável.
 
 ## Success Criteria *(mandatory)*
@@ -132,8 +109,7 @@ Antes de Contratar, a pessoa informa CPF ou CNPJ. Se esse documento já tem uma 
 - **SC-003**: Uma revisão da página recebida pelo visitante e do histórico compartilhado do projeto não encontra chave de acesso utilizável. O exemplo que acompanha o projeto não contém chave real.
 - **SC-004**: Depois de ir à página de pagamento e voltar, 100% das voltas deixam a landing sem mensagem de pagamento confirmado e sem mudança na seção de planos.
 - **SC-005**: Com a configuração ausente, com preço de cartão inválido ou com o Asaas indisponível, o visitante permanece na landing, vê a contratação indisponível e ainda usa o topo, "Como funciona", os recursos, as perguntas e a chamada final sem recarregar a página para outro destino.
-- **SC-006**: A comparação visual dos cartões, antes e depois, não mostra diferença de desenho. O preço escrito no cartão continua o do Pix em 100% dos planos pagos. A seção ganha um campo de CPF ou CNPJ.
-- **SC-007**: Em 100% das tentativas com documento que já tem assinatura ativa, nenhum checkout novo é criado e a pessoa vê o aviso de assinatura ativa. Em 100% das tentativas com documento inválido, o checkout não abre.
+- **SC-006**: A comparação visual da seção de planos, antes e depois, não mostra diferença de desenho. O preço escrito no cartão continua o do Pix em 100% dos planos pagos.
 
 ## Assumptions
 
@@ -144,7 +120,7 @@ Antes de Contratar, a pessoa informa CPF ou CNPJ. Se esse documento já tem uma 
 - A chave de acesso fica só na configuração da equipe, nunca na página recebida pelo visitante e nunca no histórico compartilhado. O guia do Asaas no Drive e o card da LLT-273 dizem a mesma coisa. O exemplo lista o ambiente e a chave como configurações necessárias, com valores de exemplo.
 - Enquanto a empresa não tiver CNPJ, só o ambiente de testes está liberado. Checkout aberto por esta página, nesse período, não cobra dinheiro real. A landing não ganha um aviso visual de teste, porque o desenho não muda.
 - Voltar da página de pagamento não ativa conta, não emite nota e não comprova pagamento. Quem confirma o pagamento é o Asaas, no fluxo do produto. Esta página não recebe esse aviso e não cria conta.
-- A landing pede só o CPF ou CNPJ, para não abrir uma segunda assinatura do mesmo documento. Não pede telefone, endereço nem cartão. O pagamento continua na página do Asaas. Uma assinatura já paga em duplicidade se encerra no painel do Asaas; esta consulta impede a próxima. Dois pagamentos concluídos ao mesmo tempo ainda podem passar, porque a landing não recebe o aviso de pagamento.
+- A landing não pede documento, telefone nem endereço, porque isso mudaria o desenho e pertence ao fluxo de contratação do produto. Se o Asaas não abrir o checkout sem esses dados, o visitante vê a contratação indisponível e permanece na página.
 - O teste de 14 dias não começa neste checkout. A página não mostra teste grátis e não pede o documento que limita o teste a uma vez por pessoa. Essa regra continua no fluxo de contratação do produto.
 - "Começar grátis" e "Acessar Página" não mudam de destino. Só Contratar, nos planos pagos, passa a abrir o Asaas.
 - A mensagem de falha é a que a página já usa: a contratação não está disponível no momento e a pessoa pode tentar mais tarde.

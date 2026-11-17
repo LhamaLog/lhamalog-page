@@ -11,47 +11,6 @@ const BASES = {
 
 const indisponivel = () => ({ disponivel: false });
 
-function digito(base, pesos) {
-  const soma = pesos.reduce((total, peso, indice) => total + Number(base[indice]) * peso, 0);
-  const resto = soma % 11;
-  return resto < 2 ? 0 : 11 - resto;
-}
-
-function cpfValido(digitos) {
-  const primeiro = digito(digitos, [10, 9, 8, 7, 6, 5, 4, 3, 2]);
-  const segundo = digito(digitos, [11, 10, 9, 8, 7, 6, 5, 4, 3, 2]);
-  return primeiro === Number(digitos[9]) && segundo === Number(digitos[10]);
-}
-
-function cnpjValido(digitos) {
-  const primeiro = digito(digitos, [5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
-  const segundo = digito(digitos, [6, 5, 4, 3, 2, 9, 8, 7, 6, 5, 4, 3, 2]);
-  return primeiro === Number(digitos[12]) && segundo === Number(digitos[13]);
-}
-
-// Devolve só os dígitos de um CPF ou CNPJ com os verificadores corretos. Caso contrário, null.
-export function documentoValido(valor) {
-  const digitos = String(valor ?? "").replace(/\D/g, "");
-  if (!/^\d+$/.test(digitos) || /^(\d)\1+$/.test(digitos)) return null;
-  if (digitos.length === 11 && cpfValido(digitos)) return digitos;
-  if (digitos.length === 14 && cnpjValido(digitos)) return digitos;
-  return null;
-}
-
-// Decide se o checkout pode abrir para esse documento.
-// clientes e assinaturas são as listas já consultadas no Asaas.
-export function decidirAssinatura(documento, clientes, assinaturas) {
-  const digitos = documentoValido(documento);
-  if (!digitos) return { tipo: "documento" };
-  const cliente = (Array.isArray(clientes) ? clientes : []).find(
-    (item) => String(item?.cpfCnpj ?? "").replace(/\D/g, "") === digitos && item?.id,
-  );
-  if (!cliente) return { tipo: "novo", documento: digitos };
-  const ativa = (Array.isArray(assinaturas) ? assinaturas : []).some((item) => item?.status === "ACTIVE");
-  if (ativa) return { tipo: "ativa" };
-  return { tipo: "existente", documento: digitos, customer: String(cliente.id) };
-}
-
 // Lê KEY=valor sem expandir $. A chave do Asaas começa com $aact_, e o leitor
 // comum do Vite apagaria esse trecho achando que é outra variável.
 export function lerEnvLiteral(texto) {
