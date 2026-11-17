@@ -38,7 +38,13 @@ Nenhum item ficou como NEEDS CLARIFICATION. As decisões saem da spec 005, do c�
 - **Rationale**: o guia do Drive nomeia `ASAAS_API_KEY` e `ASAAS_BASE_URL`, exige User-Agent junto da chave e manda a chave ficar só em variável de ambiente. Não devolver o corpo de erro evita vazar detalhe da conta. Oito segundos passam o limite de 5 segundos do caminho feliz e ainda soltam a página se o Asaas não responder.
 - **Alternatives**: (a) `fetch` em vez de Axios: o pedido desta entrega pede Axios na chamada ao Asaas; (b) gravar o `id` do checkout: a spec não confirma pagamento e não tem webhook, então não há o que atualizar com esse id.
 
-## 7. Clique repetido e pacote publicado
+## 7. Uma assinatura ativa por documento
+
+- **Decision**: antes do `POST /v3/checkouts`, a rota exige CPF ou CNPJ válido, consulta `GET /v3/customers?cpfCnpj=` e, se houver cliente, `GET /v3/subscriptions?customer=`. Status `ACTIVE` impede outro checkout. Sem assinatura ativa, o checkout reutiliza o `customer`. Sem cliente, o checkout abre sem esse campo.
+- **Rationale**: cada clique criava um checkout e cada pagamento criava outra assinatura. A LLT-231 impede nova contratação de quem já tem plano pago ativo. A landing não grava o documento e não recebe webhook; a consulta é o bloqueio possível neste processo. Assinaturas já duplicadas se encerram no painel do Asaas.
+- **Alternatives**: (a) bloquear só no clique, sem documento: a página não sabe quem é a pessoa; (b) esperar o webhook do produto: esta entrega não recebe esse aviso, então dois pagamentos simultâneos ainda podem passar.
+
+## 8. Clique repetido e pacote publicado
 
 - **Decision**: `PlansSection` ignora um segundo clique enquanto o primeiro pedido não terminou, sem trocar a classe do botão. No sucesso, navega para o endereço montado. No fracasso, mostra `SUPPORT_TEXTS.contratarIndisponivel`, que já está na seção. O teste de build procura em `dist/` a chave, o nome `ASAAS_API_KEY`, `access_token` e `assinatura/contratar`, e procura em `src/` um import de Axios.
 - **Rationale**: FR-011 pede um checkout por tentativa, e FR-012 pede o desenho atual. O botão já é `<button>`; não vira link. A busca no `dist/` prova o FR-006 no artefato que o visitante receberia se a pasta fosse publicada sozinha.

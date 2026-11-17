@@ -42,37 +42,61 @@ function AjusteDev({ catalogo, onSaved }) {
 }
 
 const PAGINA_ASAAS = /^https:\/\/(?:sandbox\.asaas\.com|asaas\.com)\/checkoutSession\/show\?id=[A-Za-z0-9_-]+$/;
+const AVISOS = {
+  documento: "Informe um CPF ou CNPJ válido.",
+  assinatura: "Este CPF ou CNPJ já tem uma assinatura ativa.",
+  indisponivel: null,
+};
 
 // Seção de planos: os mesmos cartões e o mesmo seletor, sem duplicar regra de preço.
 // "Contratar" pede o checkout à própria página e, se ele abrir, vai ao Asaas. Sem checkout, mostra "indisponível".
 export function PlansSection() {
   const state = usePlans();
-  const [unavailable, setUnavailable] = useState(false);
+  const [aviso, setAviso] = useState(null);
+  const [documento, setDocumento] = useState("");
   const emCurso = useRef(false);
   const subscribe = (plan, period) => {
     if (emCurso.current) return;
+    const digitos = documento.replace(/\D/g, "");
+    if (digitos.length !== 11 && digitos.length !== 14) {
+      setAviso("documento");
+      return;
+    }
     emCurso.current = true;
+    setAviso(null);
     fetch("/api/contratacao", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ plano: plan.codigo, periodo: period }),
+      body: JSON.stringify({ plano: plan.codigo, periodo: period, documento }),
     })
       .then(async (resposta) => {
+        const corpo = await resposta.json().catch(() => ({}));
+        if (resposta.status === 409 && corpo?.assinaturaAtiva) {
+          emCurso.current = false;
+          setAviso("assinatura");
+          return null;
+        }
+        if (resposta.status === 400 && corpo?.documentoInvalido) {
+          emCurso.current = false;
+          setAviso("documento");
+          return null;
+        }
         if (!resposta.ok) throw new Error("indisponivel");
-        return resposta.json();
+        return corpo;
       })
       .then((corpo) => {
+        if (!corpo) return;
         const url = typeof corpo?.url === "string" ? corpo.url : "";
         if (PAGINA_ASAAS.test(url)) {
           window.location.assign(url);
           return;
         }
         emCurso.current = false;
-        setUnavailable(true);
+        setAviso("indisponivel");
       })
       .catch(() => {
         emCurso.current = false;
-        setUnavailable(true);
+        setAviso("indisponivel");
       });
   };
   return (
@@ -105,14 +129,32 @@ export function PlansSection() {
             </div>
           }
           notice={
-            unavailable ? (
-              <p
-                role="status"
-                className="mx-auto max-w-xl rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-base text-amber-900"
-              >
-                {SUPPORT_TEXTS.contratarIndisponivel}
-              </p>
-            ) : null
+            <div className="mx-auto max-w-xl space-y-4">
+              <label className="block text-left">
+                <span className="mb-2 block text-sm font-semibold text-[#141826]">CPF ou CNPJ</span>
+                <input
+                  value={documento}
+                  onChange={(evento) => {
+                    setDocumento(evento.target.value);
+                    setAviso(null);
+                  }}
+                  inputMode="numeric"
+                  autoComplete="off"
+                  maxLength={18}
+                  placeholder="Somente números"
+                  aria-invalid={aviso === "documento"}
+                  className="w-full rounded-xl border border-[#D2E1F6] bg-white px-4 py-3 text-base text-[#141826] outline-none focus:border-[#0D65D9]"
+                />
+              </label>
+              {aviso ? (
+                <p
+                  role="status"
+                  className="rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-center text-base text-amber-900"
+                >
+                  {aviso === "indisponivel" ? SUPPORT_TEXTS.contratarIndisponivel : AVISOS[aviso]}
+                </p>
+              ) : null}
+            </div>
           }
         />
         {import.meta.env.DEV ? <AjusteDev catalogo={state.data} onSaved={state.reload} /> : null}

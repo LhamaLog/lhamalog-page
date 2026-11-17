@@ -44,7 +44,7 @@ Corpo, para o Pro mensal a R$ 81,95 (8195 centavos no catálogo):
 }
 ```
 
-As três URLs de `callback` são a origem real do pedido, não um endereço fixo. `nextDueDate` é o instante atual em America/Sao_Paulo. Não se envia `customer`, `customerData`, `installment` nem `endDate`.
+As três URLs de `callback` são a origem real do pedido, não um endereço fixo. `nextDueDate` é o instante atual em America/Sao_Paulo. Não se envia `customerData`, `installment` nem `endDate`. `customer` só entra quando o documento já é um cliente sem assinatura `ACTIVE`.
 
 | Periodicidade da página | `cycle` | Sufixo do nome |
 |---|---|---|

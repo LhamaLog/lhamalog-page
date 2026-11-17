@@ -15,6 +15,17 @@ Já existe em `public/planos.json`. Esta entrega só lê.
 
 `periodo` é o valor do seletor: `SEMANAL`, `MENSAL` ou `SEMESTRAL`.
 
+## Documento do contratante
+
+CPF de 11 dígitos ou CNPJ de 14, conferido pelos dígitos verificadores. Sequência de um só dígito repetido é inválida. Não é gravado na landing. Serve para achar o cliente no Asaas antes de criar o checkout.
+
+| Situação | Efeito |
+|---|---|
+| Documento inválido | checkout não abre |
+| Nenhum cliente com esse documento | checkout sem `customer` |
+| Cliente sem assinatura `ACTIVE` | checkout com `customer` igual ao id dele |
+| Cliente com alguma assinatura `ACTIVE` | checkout não abre |
+
 Validação na rota, antes de chamar o Asaas: o catálogo passa em `validateCatalog`; o código é um dos quatro pagos; a periodicidade é uma das três; `CARTAO` é inteiro maior que zero. Qualquer outra coisa responde indisponível e não chama o Asaas.
 
 ## Configuração de acesso

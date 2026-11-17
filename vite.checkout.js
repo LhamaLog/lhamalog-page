@@ -2,7 +2,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import axios from "axios";
 import { validateCatalog } from "./src/features/subscription/catalogo.js";
-import { lerEnvLiteral, montarPedido, urlDoCheckout } from "./src/features/subscription/checkout.js";
+import {
+  decidirAssinatura,
+  documentoValido,
+  lerEnvLiteral,
+  montarPedido,
+  urlDoCheckout,
+} from "./src/features/subscription/checkout.js";
 
 const ARQUIVO = resolve("public/planos.json");
 const LIMITE = 100 * 1024;
@@ -66,6 +72,42 @@ function indisponivel(res) {
   responder(res, 503, { disponivel: false });
 }
 
+function cabecalhos(chave) {
+  return {
+    access_token: chave,
+    "User-Agent": "LhamaLog-Page",
+  };
+}
+
+async function consultar(base, chave, caminho, params) {
+  const resposta = await axios.get(`${base}${caminho}`, {
+    params,
+    headers: cabecalhos(chave),
+    timeout: 8000,
+    validateStatus: () => true,
+  });
+  if (resposta.status !== 200 || !resposta.data || typeof resposta.data !== "object") return null;
+  return resposta.data;
+}
+
+async function assinaturasDoCliente(base, chave, customerId) {
+  const lista = [];
+  let offset = 0;
+  for (let pagina = 0; pagina < 5; pagina += 1) {
+    const corpo = await consultar(base, chave, "/subscriptions", {
+      customer: customerId,
+      limit: 100,
+      offset,
+    });
+    if (!corpo) return null;
+    const paginaAtual = Array.isArray(corpo.data) ? corpo.data : [];
+    lista.push(...paginaAtual);
+    if (lista.some((item) => item?.status === "ACTIVE") || !corpo.hasMore) return lista;
+    offset += paginaAtual.length || 100;
+  }
+  return lista;
+}
+
 async function contratar(req, res) {
   const chave = String(process.env.ASAAS_API_KEY ?? "").trim();
   const base = String(process.env.ASAAS_BASE_URL ?? "").trim();
@@ -119,12 +161,47 @@ async function contratar(req, res) {
     indisponivel(res);
     return;
   }
+  if (!documentoValido(corpo.documento)) {
+    responder(res, 400, { documentoInvalido: true });
+    return;
+  }
+  let clientes = [];
+  let assinaturas = [];
+  try {
+    const achados = await consultar(base, chave, "/customers", { cpfCnpj: documentoValido(corpo.documento) });
+    if (!achados) {
+      indisponivel(res);
+      return;
+    }
+    clientes = Array.isArray(achados.data) ? achados.data : [];
+    const previa = decidirAssinatura(corpo.documento, clientes, []);
+    if (previa.tipo === "existente") {
+      const lista = await assinaturasDoCliente(base, chave, previa.customer);
+      if (!lista) {
+        indisponivel(res);
+        return;
+      }
+      assinaturas = lista;
+    }
+  } catch {
+    indisponivel(res);
+    return;
+  }
+  const decisao = decidirAssinatura(corpo.documento, clientes, assinaturas);
+  if (decisao.tipo === "documento") {
+    responder(res, 400, { documentoInvalido: true });
+    return;
+  }
+  if (decisao.tipo === "ativa") {
+    responder(res, 409, { assinaturaAtiva: true });
+    return;
+  }
+  const corpoAsaas = decisao.tipo === "existente" ? { ...pedido.pedido, customer: decisao.customer } : pedido.pedido;
   let resposta;
   try {
-    resposta = await axios.post(`${base}/checkouts`, pedido.pedido, {
+    resposta = await axios.post(`${base}/checkouts`, corpoAsaas, {
       headers: {
-        access_token: chave,
-        "User-Agent": "LhamaLog-Page",
+        ...cabecalhos(chave),
         "Content-Type": "application/json",
       },
       timeout: 8000,
