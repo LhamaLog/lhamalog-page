@@ -137,8 +137,8 @@ export function criarTravaClique() {
   };
 }
 
-const LOCAIS = new Set(["localhost", "127.0.0.1", "::1"]);
 const BASE_SANDBOX = "https://api-sandbox.asaas.com/v3";
+const AMBIENTE_HOMOLOGACAO = "HOMOLOGACAO";
 
 function normalizarIp(valor) {
   const texto = String(valor ?? "").trim();
@@ -173,16 +173,11 @@ export function ipDoPedido(socketIp, encaminhado, proxiesExtras = "") {
   return saltos.at(-1) || socket || "desconhecido";
 }
 
-export function hostLocal(host) {
-  const nome = String(host ?? "").trim();
-  const semPorta = nome.startsWith("[")
-    ? nome.slice(1, nome.indexOf("]"))
-    : nome.replace(/:\d+$/, "");
-  return LOCAIS.has(semPorta);
-}
-
-export function sandboxEmHostPublico(baseUrl, host) {
-  return baseUrl === BASE_SANDBOX && !hostLocal(host);
+// O sandbox só abre com ASAAS_AMBIENTE=HOMOLOGACAO. PRODUCAO, vazio ou outro valor recusa,
+// sem olhar o host da página.
+export function sandboxRecusado(baseUrl, ambiente) {
+  if (baseUrl !== BASE_SANDBOX) return false;
+  return String(ambiente ?? "").trim() !== AMBIENTE_HOMOLOGACAO;
 }
 
 export function urlDoCheckout(baseUrl, id) {

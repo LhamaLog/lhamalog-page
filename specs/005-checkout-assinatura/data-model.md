@@ -23,7 +23,8 @@ Não é entidade gravada no repositório.
 
 | Nome | Obrigatório | Valor |
 |---|---|---|
-| `ASAAS_BASE_URL` | sim, para abrir checkout | `https://api-sandbox.asaas.com/v3` até haver CNPJ e a equipe apontar produção para `https://api.asaas.com/v3` |
+| `ASAAS_AMBIENTE` | sim, para abrir a base de testes | `HOMOLOGACAO` aceita o sandbox em qualquer host. `PRODUCAO` recusa o sandbox. Vazio ou outro valor também recusa. Não depende do host da página |
+| `ASAAS_BASE_URL` | sim, para abrir checkout | `https://api-sandbox.asaas.com/v3` com `HOMOLOGACAO`, ou `https://api.asaas.com/v3` com `PRODUCAO` |
 | `ASAAS_API_KEY` | sim, para abrir checkout | chave da conta do mesmo ambiente. No exemplo versionado, um texto que não é chave |
 
 Ausente, vazio ou base fora dessas duas URLs: contratação indisponível.

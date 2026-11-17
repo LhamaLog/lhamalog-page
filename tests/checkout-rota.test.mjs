@@ -6,7 +6,11 @@ import { criarMiddlewareContratacao } from "../vite.checkout.js";
 import { criarTravaClique, destinoContratacao } from "../src/features/subscription/checkout.js";
 
 const catalogo = readFileSync(new URL("../public/planos.json", import.meta.url), "utf8");
-const env = { ASAAS_API_KEY: "$aact_hmlg_teste", ASAAS_BASE_URL: "https://api-sandbox.asaas.com/v3" };
+const env = {
+  ASAAS_API_KEY: "$aact_hmlg_teste",
+  ASAAS_BASE_URL: "https://api-sandbox.asaas.com/v3",
+  ASAAS_AMBIENTE: "HOMOLOGACAO",
+};
 
 function pedido({ method = "POST", url = "/api/contratacao", host = "localhost:3000", headers = {}, body = "", ip = "127.0.0.1" }) {
   const req = Readable.from([Buffer.from(body)]);
@@ -184,7 +188,7 @@ test("atrás de um proxy privado o limite usa o último X-Forwarded-For, e um so
   assert.equal(chamadas.length, 3);
 });
 
-test("sandbox em host público não abre checkout", async () => {
+test("HOMOLOGACAO abre o sandbox em qualquer host", async () => {
   const { rota, chamadas } = middleware();
   const resultado = await chamar(rota, pedido({
     host: "lhamalog.com",
@@ -196,6 +200,37 @@ test("sandbox em host público não abre checkout", async () => {
     body: '{"plano":"PRO","periodo":"MENSAL"}',
     ip: "203.0.113.20",
   }));
+  assert.equal(resultado.res.statusCode, 200);
+  assert.equal(resultado.json.url, "https://sandbox.asaas.com/checkoutSession/show?id=abc-123");
+  assert.equal(chamadas.length, 1);
+});
+
+test("PRODUCAO recusa o sandbox em qualquer host", async () => {
+  const producao = { ...env, ASAAS_AMBIENTE: "PRODUCAO" };
+  for (const host of ["localhost:3000", "lhamalog.com"]) {
+    const { rota, chamadas, registros } = middleware({ env: producao });
+    const origem = host.startsWith("localhost") ? "http://localhost:3000" : "https://lhamalog.com";
+    const resultado = await chamar(rota, pedido({
+      host,
+      headers: {
+        "content-type": "application/json",
+        origin: origem,
+        "sec-fetch-site": "same-origin",
+      },
+      body: '{"plano":"PRO","periodo":"MENSAL"}',
+      ip: "203.0.113.21",
+    }));
+    assert.equal(resultado.res.statusCode, 503);
+    assert.deepEqual(resultado.json, { disponivel: false });
+    assert.equal(chamadas.length, 0);
+    assert.equal(registros.at(-1).resultado, "sandbox-recusado");
+  }
+});
+
+test("sem ASAAS_AMBIENTE o sandbox não abre", async () => {
+  const semAmbiente = { ASAAS_API_KEY: env.ASAAS_API_KEY, ASAAS_BASE_URL: env.ASAAS_BASE_URL };
+  const { rota, chamadas } = middleware({ env: semAmbiente });
+  const resultado = await chamar(rota, pedido({ headers: json, body: '{"plano":"PRO","periodo":"MENSAL"}' }));
   assert.equal(resultado.res.statusCode, 503);
   assert.equal(chamadas.length, 0);
 });

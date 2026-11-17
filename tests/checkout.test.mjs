@@ -1,7 +1,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { lerEnvLiteral, montarPedido, urlDoCheckout } from "../src/features/subscription/checkout.js";
+import { lerEnvLiteral, montarPedido, sandboxRecusado, urlDoCheckout } from "../src/features/subscription/checkout.js";
 
 const catalogo = JSON.parse(readFileSync(new URL("../public/planos.json", import.meta.url), "utf8"));
 const PAGOS = ["STARTER", "PRO", "BUSINESS", "ENTERPRISE"];
@@ -105,6 +105,18 @@ test("o retorno em localhost vira 127.0.0.1, que o Asaas aceita", () => {
   assert.equal(resultado.pedido.callback.successUrl, "http://127.0.0.1:3000/");
   assert.equal(resultado.pedido.callback.cancelUrl, "http://127.0.0.1:3000/");
   assert.equal(resultado.pedido.callback.expiredUrl, "http://127.0.0.1:3000/");
+});
+
+test("o sandbox só abre em HOMOLOGACAO e não olha o host", () => {
+  const sandbox = "https://api-sandbox.asaas.com/v3";
+  const producao = "https://api.asaas.com/v3";
+  assert.equal(sandboxRecusado(sandbox, "HOMOLOGACAO"), false);
+  assert.equal(sandboxRecusado(sandbox, " PRODUCAO "), true);
+  assert.equal(sandboxRecusado(sandbox, "PRODUCAO"), true);
+  assert.equal(sandboxRecusado(sandbox, ""), true);
+  assert.equal(sandboxRecusado(sandbox, undefined), true);
+  assert.equal(sandboxRecusado(producao, "PRODUCAO"), false);
+  assert.equal(sandboxRecusado(producao, "HOMOLOGACAO"), false);
 });
 
 test("a chave do Asaas que começa com $ permanece inteira", () => {
