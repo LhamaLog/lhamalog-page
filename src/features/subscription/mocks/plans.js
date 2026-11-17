@@ -13,7 +13,7 @@ const byMethod = (pix, card, debit) => ({
   CARTAO: card,
   DEBITO: debit,
 });
-// Função (e não constante) para o bundler descartar tudo isto no build de produção.
+// Lista de planos da página. Fica no próprio projeto; a página não consulta API.
 export function fakePlans() {
   const quotaPer = { SEMANAL: "SEMANA", MENSAL: "MES", SEMESTRAL: "MES" };
   // Free não tem periodicidade: a franquia de 1 GB é sempre por mês.

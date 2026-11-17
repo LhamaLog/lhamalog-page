@@ -167,8 +167,6 @@ Copie `.env.example` para `.env.local` (ignorado pelo Git) e ajuste:
 | Variável | Para que serve |
 |---|---|
 | `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Acessar Página", "Começar grátis" e "Contratar" levam para lá. Vazio: usa o padrão `https://app.lhamalog.com`. Só preencha para apontar para outro ambiente. |
-| `VITE_API_URL` | API do Core, de onde vem a lista pública de planos (`GET /api/v1/planos`). |
-| `VITE_USAR_DADOS_FALSOS` | Só em desenvolvimento: `true` mostra planos falsos sem o Core (o build de produção ignora). Variações pela URL: `?simular=vazio` e `?simular=erro`. |
 
 "Contratar" leva a `<VITE_APP_URL>/sign-up?redirect_url=<VITE_APP_URL>/assinatura/contratar?plano=<PLANO>&periodo=<PERIODO>`.
 
@@ -190,7 +188,7 @@ src/main.jsx                       monta a landing
 src/styles.css                     Tailwind e rolagem suave
 src/features/landing/              landing: textos (content.js), cores (landingTokens.js), seções e telas de exemplo
 src/features/subscription/         cartões, seletor de periodicidade e dados dos planos (mesmo contrato da LLT-230)
-src/shared/                        logo, endereços do app (appLinks.js), erro de API e estados (carregando, erro, vazio)
+src/shared/                        logo, endereços do app (appLinks.js) e estados (carregando, erro, vazio)
 tests/                             testes com node --test
 specs/                             Spec Kit: 001 (inicialização) e 002 (landing page)
 vite.config.js                     servidor de desenvolvimento na porta 3000, React e Tailwind
