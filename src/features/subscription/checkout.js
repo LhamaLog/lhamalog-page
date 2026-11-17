@@ -137,6 +137,54 @@ export function criarTravaClique() {
   };
 }
 
+const LOCAIS = new Set(["localhost", "127.0.0.1", "::1"]);
+const BASE_SANDBOX = "https://api-sandbox.asaas.com/v3";
+
+function normalizarIp(valor) {
+  const texto = String(valor ?? "").trim();
+  if (texto.startsWith("::ffff:")) return texto.slice(7);
+  return texto;
+}
+
+function ipPrivado(ip) {
+  if (ip === "127.0.0.1" || ip === "::1") return true;
+  if (ip.startsWith("10.") || ip.startsWith("192.168.")) return true;
+  if (/^172\.(1[6-9]|2\d|3[0-1])\./.test(ip)) return true;
+  if (ip.startsWith("fc") || ip.startsWith("fd")) return true;
+  return false;
+}
+
+// O X-Forwarded-For só vale quando o socket é de um proxy conhecido (rede privada ou a lista
+// CONTRATACAO_PROXIES). Nesse caso o último salto é o que o proxy acrescentou.
+export function ipDoPedido(socketIp, encaminhado, proxiesExtras = "") {
+  const socket = normalizarIp(socketIp);
+  const extras = new Set(
+    String(proxiesExtras)
+      .split(",")
+      .map((item) => normalizarIp(item))
+      .filter(Boolean),
+  );
+  const confiavel = Boolean(socket) && (ipPrivado(socket) || extras.has(socket));
+  if (!confiavel) return socket || "desconhecido";
+  const saltos = String(encaminhado ?? "")
+    .split(",")
+    .map((item) => normalizarIp(item))
+    .filter(Boolean);
+  return saltos.at(-1) || socket || "desconhecido";
+}
+
+export function hostLocal(host) {
+  const nome = String(host ?? "").trim();
+  const semPorta = nome.startsWith("[")
+    ? nome.slice(1, nome.indexOf("]"))
+    : nome.replace(/:\d+$/, "");
+  return LOCAIS.has(semPorta);
+}
+
+export function sandboxEmHostPublico(baseUrl, host) {
+  return baseUrl === BASE_SANDBOX && !hostLocal(host);
+}
+
 export function urlDoCheckout(baseUrl, id) {
   const host = BASES[baseUrl];
   if (!host || typeof id !== "string" || !/^[A-Za-z0-9_-]+$/.test(id)) return indisponivel();

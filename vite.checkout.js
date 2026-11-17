@@ -2,7 +2,13 @@ import { existsSync, readFileSync } from "node:fs";
 import { resolve } from "node:path";
 import axios from "axios";
 import { validateCatalog } from "./src/features/subscription/catalogo.js";
-import { lerEnvLiteral, montarPedido, urlDoCheckout } from "./src/features/subscription/checkout.js";
+import {
+  ipDoPedido,
+  lerEnvLiteral,
+  montarPedido,
+  sandboxEmHostPublico,
+  urlDoCheckout,
+} from "./src/features/subscription/checkout.js";
 
 const ARQUIVO = resolve("public/planos.json");
 const LIMITE = 100 * 1024;
@@ -40,8 +46,8 @@ function hostname(host) {
   return valor.replace(/:\d+$/, "");
 }
 
-function ipDe(req) {
-  return req.socket?.remoteAddress || "desconhecido";
+function ipDe(req, env) {
+  return ipDoPedido(req.socket?.remoteAddress, req.headers?.["x-forwarded-for"], env.CONTRATACAO_PROXIES);
 }
 
 function lerCorpo(req) {
@@ -102,7 +108,7 @@ export function criarMiddlewareContratacao({
   return async (req, res, next) => {
     const caminho = req.url?.split("?")[0];
     if (caminho !== ROTA || req.method !== "POST") return next();
-    const ip = ipDe(req);
+    const ip = ipDe(req, env);
     const recusar = (status, corpo, resultado) => {
       registrar(resultado, ip);
       responder(res, status, corpo);
@@ -122,7 +128,12 @@ export function criarMiddlewareContratacao({
       return;
     }
     const instante = agora().getTime();
-    const recentes = (tentativas.get(ip) || []).filter((marca) => instante - marca < JANELA_MS);
+    for (const [chave, marcas] of tentativas) {
+      const vivas = marcas.filter((marca) => instante - marca < JANELA_MS);
+      if (vivas.length === 0) tentativas.delete(chave);
+      else tentativas.set(chave, vivas);
+    }
+    const recentes = tentativas.get(ip) || [];
     if (recentes.length >= limitePorIp) {
       tentativas.set(ip, recentes);
       recusar(429, { disponivel: false }, "limite");
@@ -154,6 +165,11 @@ async function contratar(req, res, { lerCatalogo, postCheckout, agora, env, regi
   const base = String(env.ASAAS_BASE_URL ?? "").trim();
   if (!chave || !base || !urlDoCheckout(base, "valido").disponivel) {
     registrar("sem-acesso", ip);
+    indisponivel(res);
+    return;
+  }
+  if (sandboxEmHostPublico(base, req.headers.host)) {
+    registrar("sandbox-publico", ip);
     indisponivel(res);
     return;
   }

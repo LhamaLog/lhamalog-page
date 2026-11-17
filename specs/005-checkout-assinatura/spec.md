@@ -91,9 +91,10 @@ O acesso ao Asaas não está configurado, o catálogo do plano pago não tem pre
 - **FR-009**: O nome curto do item na página de pagamento MUST identificar o plano e a periodicidade e MUST ter no máximo 30 caracteres.
 - **FR-010**: Se a configuração de acesso estiver ausente, se o preço de cartão de crédito da combinação escolhida estiver ausente ou for inválido, ou se o Asaas não abrir o checkout, a landing MUST manter o visitante na página, MUST mostrar a mensagem de contratação indisponível que a página já usa e MUST NOT enviá-lo a app.lhamalog.com. O topo, "Como funciona", os recursos, as perguntas e a chamada final MUST continuar utilizáveis.
 - **FR-011**: Enquanto um checkout ainda está sendo aberto, um novo clique em Contratar MUST NOT abrir um segundo checkout. Se o navegador restaurar a página pelo cache de voltar, o botão MUST voltar a responder.
-- **FR-016**: A rota que abre o checkout MUST aceitar só JSON, MUST recusar origem de outro site e MUST limitar tentativas por IP. O registro da tentativa MUST NOT incluir a chave de acesso. O preço enviado pelo navegador MUST ser ignorado.
 - **FR-012**: O desenho da página MUST permanecer o atual. Esta entrega MUST NOT mudar cartões, seletor, textos, selos, ordem dos planos nem o preço de Pix exibido. Esta entrega MUST NOT acrescentar seletor de forma de pagamento, formulário de cadastro nem aviso de teste grátis.
 - **FR-013**: Pix, débito, boleto, teste de 14 dias, ativação de conta, nota fiscal, reembolso, upgrade e cancelamento MUST NOT fazer parte desta entrega. O checkout de assinatura desta página é o de cartão de crédito.
+- **FR-014**: A rota que abre o checkout MUST aceitar só JSON, MUST recusar origem de outro site e MUST limitar tentativas pelo IP do visitante. Atrás de um proxy de rede privada, ou listado em `CONTRATACAO_PROXIES`, esse IP é o último salto de `X-Forwarded-For`. Fora isso, é o IP do socket. O registro da tentativa MUST NOT incluir a chave de acesso. O preço enviado pelo navegador MUST ser ignorado.
+- **FR-015**: Enquanto a base configurada for a de testes, Contratar MUST abrir checkout só em `localhost`, `127.0.0.1` ou `::1`. Num host público, MUST mostrar a contratação indisponível e MUST NOT criar checkout de testes.
 
 ### Key Entities
 

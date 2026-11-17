@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readdirSync, readFileSync, statSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync, statSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 
@@ -30,7 +31,8 @@ test("o pacote da página não importa Axios nem a chave do Asaas", () => {
 
 test("o pacote publicado não contém a chave nem access_token", () => {
   const raiz = fileURLToPath(new URL("..", import.meta.url));
-  execFileSync("npm", ["run", "build"], { cwd: raiz, stdio: "pipe" });
+  const saida = mkdtempSync(join(tmpdir(), "checkout-dist-"));
+  execFileSync("npm", ["run", "build", "--", "--outDir", saida, "--emptyOutDir"], { cwd: raiz, stdio: "pipe" });
   const textos = [];
   const visitar = (pasta) => {
     for (const nome of readdirSync(pasta)) {
@@ -39,7 +41,7 @@ test("o pacote publicado não contém a chave nem access_token", () => {
       else if (/\.(js|html|css)$/.test(nome)) textos.push(readFileSync(caminho, "utf8"));
     }
   };
-  visitar(join(raiz, "dist"));
+  visitar(saida);
   const junto = textos.join("\n");
   assert.equal(junto.includes("ASAAS_API_KEY"), false);
   assert.equal(junto.includes("access_token"), false);

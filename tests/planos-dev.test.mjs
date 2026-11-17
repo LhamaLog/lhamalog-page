@@ -133,7 +133,8 @@ test("grava o catálogo válido da própria página local", async () => {
 
 test("o pacote publicado não contém o ajuste", () => {
   const raiz = fileURLToPath(new URL("..", import.meta.url));
-  execFileSync("npm", ["run", "build"], {
+  const saida = mkdtempSync(join(tmpdir(), "planos-dist-"));
+  execFileSync("npm", ["run", "build", "--", "--outDir", saida, "--emptyOutDir"], {
     cwd: raiz,
     env: { ...process.env, LHAMALOG_AJUSTE_PLANOS: "" },
     stdio: "pipe",
@@ -146,7 +147,7 @@ test("o pacote publicado não contém o ajuste", () => {
       else if (/\.(js|html|css)$/.test(nome)) textos.push(readFileSync(caminho, "utf8"));
     }
   };
-  visitar(join(raiz, "dist"));
+  visitar(saida);
   const junto = textos.join("\n");
   assert.equal(junto.includes("__dev/planos"), false);
   assert.equal(junto.includes("Ajustar planos"), false);

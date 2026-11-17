@@ -150,6 +150,56 @@ test("outro site e conteúdo que não é JSON são recusados", async () => {
   assert.equal(chamadas.length, 0);
 });
 
+test("atrás de um proxy privado o limite usa o último X-Forwarded-For, e um socket público ignora o cabeçalho", async () => {
+  const { rota, chamadas } = middleware({ limitePorIp: 1 });
+  const corpo = '{"plano":"PRO","periodo":"MENSAL"}';
+  const cabecalhos = {
+    ...json,
+    "x-forwarded-for": "1.1.1.1, 203.0.113.10",
+  };
+  const primeiro = await chamar(rota, pedido({
+    headers: cabecalhos,
+    body: corpo,
+    ip: "10.8.0.4",
+  }));
+  const segundo = await chamar(rota, pedido({
+    headers: { ...cabecalhos, "x-forwarded-for": "9.9.9.9, 203.0.113.11" },
+    body: corpo,
+    ip: "10.8.0.4",
+  }));
+  const direto = await chamar(rota, pedido({
+    headers: { ...json, "x-forwarded-for": "1.1.1.1" },
+    body: corpo,
+    ip: "203.0.113.40",
+  }));
+  const repetido = await chamar(rota, pedido({
+    headers: { ...json, "x-forwarded-for": "8.8.8.8" },
+    body: corpo,
+    ip: "203.0.113.40",
+  }));
+  assert.equal(primeiro.res.statusCode, 200);
+  assert.equal(segundo.res.statusCode, 200);
+  assert.equal(direto.res.statusCode, 200);
+  assert.equal(repetido.res.statusCode, 429);
+  assert.equal(chamadas.length, 3);
+});
+
+test("sandbox em host público não abre checkout", async () => {
+  const { rota, chamadas } = middleware();
+  const resultado = await chamar(rota, pedido({
+    host: "lhamalog.com",
+    headers: {
+      "content-type": "application/json",
+      origin: "https://lhamalog.com",
+      "sec-fetch-site": "same-origin",
+    },
+    body: '{"plano":"PRO","periodo":"MENSAL"}',
+    ip: "203.0.113.20",
+  }));
+  assert.equal(resultado.res.statusCode, 503);
+  assert.equal(chamadas.length, 0);
+});
+
 test("o limite por IP responde 429 e não chama o Asaas de novo", async () => {
   const { rota, chamadas } = middleware({ limitePorIp: 1 });
   const corpo = '{"plano":"PRO","periodo":"MENSAL"}';
