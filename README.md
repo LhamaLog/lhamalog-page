@@ -203,9 +203,9 @@ src/features/landing/              landing: textos (content.js), cores (landingT
 src/features/subscription/         cartões e seletor de periodicidade; a oferta fica em public/planos.json
 src/shared/                        logo, endereços do app (appLinks.js) e estados (carregando, erro, vazio)
 tests/                             testes com node --test
-specs/                             Spec Kit: 001 (inicialização), 002 (landing), 003 (reformulação) e 004 (ajuste dos planos)
-vite.config.js                     servidor de desenvolvimento na porta 3000, React e Tailwind
-Dockerfile                         imagem Node 26
+specs/                             Spec Kit: 001 a 004 e 005 (checkout de assinatura no Asaas)
+vite.config.js                     Vite na porta 3000: desenvolvimento, preview e a rota de checkout
+Dockerfile                         imagem Node 26; gera a página e sobe o preview
 docker-compose.yml                 sobe só a página
 Makefile                           make run, make build, make docker
 ```

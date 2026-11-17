@@ -113,6 +113,30 @@ export function montarPedido({ codigo, nome, periodo, centavosCartao, origem, ag
   };
 }
 
+const PAGINA_ASAAS = /^https:\/\/(?:sandbox\.asaas\.com|asaas\.com)\/checkoutSession\/show\?id=[A-Za-z0-9_-]+$/;
+
+// A página só navega quando o processo devolve um endereço do checkout do Asaas.
+export function destinoContratacao(status, corpo) {
+  const url = typeof corpo?.url === "string" ? corpo.url : "";
+  if (status === 200 && PAGINA_ASAAS.test(url)) return { tipo: "navegar", url };
+  return { tipo: "indisponivel" };
+}
+
+// Um clique em andamento não abre outro checkout. pageshow com a página restaurada libera de novo.
+export function criarTravaClique() {
+  let emCurso = false;
+  return {
+    ocupar() {
+      if (emCurso) return false;
+      emCurso = true;
+      return true;
+    },
+    liberar() {
+      emCurso = false;
+    },
+  };
+}
+
 export function urlDoCheckout(baseUrl, id) {
   const host = BASES[baseUrl];
   if (!host || typeof id !== "string" || !/^[A-Za-z0-9_-]+$/.test(id)) return indisponivel();

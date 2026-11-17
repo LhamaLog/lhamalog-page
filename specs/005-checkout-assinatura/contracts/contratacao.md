@@ -29,6 +29,16 @@ Qualquer outro campo no JSON é ignorado. Em especial, um valor, um nome ou um e
 
 O host é `sandbox.asaas.com` ou `asaas.com`, conforme [asaas-checkout.md](asaas-checkout.md). O caminho é `/checkoutSession/show` e o `id` não contém `/`, `?` nem `&`. A página só navega se a resposta obedecer a isso. Em produção configurada, o host é `asaas.com`.
 
+## Recusas antes do Asaas
+
+| Status | Quando |
+|---|---|
+| 415 | o conteúdo não é JSON |
+| 403 | `Sec-Fetch-Site` veio preenchido e não é `same-origin`, ou `Origin` aponta para outro host |
+| 429 | o mesmo IP passou de 10 pedidos em 60 segundos |
+
+O corpo dessas respostas é `{ "disponivel": false }`. Cada tentativa fica no log do processo, sem a chave e sem o corpo do pedido.
+
 ## Resposta indisponível
 
 `503` e o corpo `{ "disponivel": false }`.

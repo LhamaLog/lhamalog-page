@@ -8,7 +8,7 @@
 
 ## Summary
 
-Contratar, num plano pago, deixa de abrir o cadastro em app.lhamalog.com. O navegador pede à própria página um checkout de assinatura. O processo Node que já serve a landing (o `npm run dev` do Dockerfile e o `vite preview`) lê o preço de cartão de crédito em `public/planos.json`, chama o Asaas com Axios e devolve só o endereço da página de pagamento. A chave fica em variável de ambiente, sem o prefixo que o Vite publica no navegador, e o exemplo no repositório não tem chave utilizável.
+Contratar, num plano pago, deixa de abrir o cadastro em app.lhamalog.com. O navegador pede à própria página um checkout de assinatura. O processo Node que serve a landing (`npm run dev` na máquina e `npm run preview` na imagem, desde a LLT-272) lê o preço de cartão de crédito em `public/planos.json`, chama o Asaas com Axios e devolve só o endereço da página de pagamento. A chave fica em variável de ambiente, sem o prefixo que o Vite publica no navegador, e o exemplo no repositório não tem chave utilizável. A rota só aceita JSON da própria origem e limita tentativas por IP.
 
 O desenho dos cartões não muda. "Começar grátis" e "Acessar Página" continuam no aplicativo. Voltar do Asaas não mostra pagamento confirmado. Pix, débito, boleto, teste de 14 dias e ativação de conta ficam de fora.
 
@@ -22,7 +22,7 @@ O desenho dos cartões não muda. "Começar grátis" e "Acessar Página" continu
 
 **Testing**: `node --test tests/*.test.mjs` para o pedido ao Asaas, o nome de até 30 caracteres, o preço de cartão e o endereço de pagamento, sem rede. `npm run build` seguido de busca em `dist/` para garantir que a chave e o caminho antigo de Contratar não entram no pacote. Roteiro manual do [quickstart.md](quickstart.md).
 
-**Target Platform**: navegador, servido pelo Node na porta 3000 (`npm run dev`, inclusive o Docker) ou por `vite preview`. Um hospedeiro que só entrega a pasta `dist/`, sem esse processo, não consegue abrir o checkout: a chave não pode ir no pacote, e Contratar mostra a indisponibilidade que a página já usa.
+**Target Platform**: navegador, servido pelo Node na porta 3000. Na máquina, `npm run dev`. Na imagem Docker, `npm run preview` da pasta gerada (LLT-272). Um hospedeiro que só entrega a pasta `dist/`, sem esse processo, não consegue abrir o checkout: a chave não pode ir no pacote, e Contratar mostra a indisponibilidade que a página já usa. O `vite preview` não substitui um servidor de aplicação; aqui ele só publica a página e a rota de checkout.
 
 **Project Type**: página web de uma tela, com a chamada ao Asaas no mesmo processo que a serve.
 
@@ -84,7 +84,7 @@ package.json                                               # EDITA: dependência
 package-lock.json                                          # EDITA: trava a versão instalada
 ```
 
-**Structure Decision**: a regra do checkout fica em `checkout.js`, sem JSX e sem Axios, para o teste e o plugin importarem o mesmo módulo. O plugin segue o desenho de `vite.planos.js`: middleware no servidor do Vite, que é o processo do `Dockerfile` (`npm run dev`). O navegador não importa esse arquivo. `PublicPlanCard.jsx`, `format.js` e `catalogo.js` não mudam de aparência nem de validação.
+**Structure Decision**: a regra do checkout fica em `checkout.js`, sem JSX e sem Axios, para o teste e o plugin importarem o mesmo módulo. O plugin segue o desenho de `vite.planos.js`: middleware no servidor do Vite. Na imagem, esse servidor é o `npm run preview`. O navegador não importa o plugin. `PublicPlanCard.jsx`, `format.js` e `catalogo.js` não mudam de aparência nem de validação. Não há camadas `domain`, `application`, `infrastructure` e `presentation`: o card da LLT-273 pedia essas camadas e um provedor sem backend próprio. Criar o checkout do Asaas exige a chave secreta, que não pode ir no pacote do navegador. Esta entrega registra essa divergência e mantém a chamada no processo que já serve a página, em vez de um backend de produto separado.
 
 ## Complexity Tracking
 

@@ -1,7 +1,9 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
+import { execFileSync } from "node:child_process";
 import { readdirSync, readFileSync, statSync } from "node:fs";
 import { join } from "node:path";
+import { fileURLToPath } from "node:url";
 
 function arquivos(diretorio) {
   const lista = [];
@@ -24,6 +26,35 @@ test("o pacote da página não importa Axios nem a chave do Asaas", () => {
     assert.equal(texto.includes("access_token"), false, caminho);
     assert.equal(texto.includes("import.meta.env.ASAAS"), false, caminho);
   }
+});
+
+test("o pacote publicado não contém a chave nem access_token", () => {
+  const raiz = fileURLToPath(new URL("..", import.meta.url));
+  execFileSync("npm", ["run", "build"], { cwd: raiz, stdio: "pipe" });
+  const textos = [];
+  const visitar = (pasta) => {
+    for (const nome of readdirSync(pasta)) {
+      const caminho = join(pasta, nome);
+      if (statSync(caminho).isDirectory()) visitar(caminho);
+      else if (/\.(js|html|css)$/.test(nome)) textos.push(readFileSync(caminho, "utf8"));
+    }
+  };
+  visitar(join(raiz, "dist"));
+  const junto = textos.join("\n");
+  assert.equal(junto.includes("ASAAS_API_KEY"), false);
+  assert.equal(junto.includes("access_token"), false);
+  assert.equal(junto.includes("assinatura/contratar"), false);
+  assert.equal(junto.includes("$aact_"), false);
+});
+
+test("Contratar libera o clique quando o navegador restaura a página", () => {
+  const texto = readFileSync(
+    new URL("../src/features/landing/components/PlansSection.jsx", import.meta.url),
+    "utf8",
+  );
+  assert.equal(texto.includes("pageshow"), true);
+  assert.equal(texto.includes("destinoContratacao"), true);
+  assert.equal(texto.includes("window.location.assign(destino.url)"), true);
 });
 
 test("a landing não trata a volta do pagamento como confirmação", () => {
