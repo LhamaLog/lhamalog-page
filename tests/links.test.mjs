@@ -1,7 +1,8 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { contractUrl, DEFAULT_APP_URL, signInUrl, signUpUrl } from "../src/shared/appLinks.js";
+import * as links from "../src/shared/appLinks.js";
+import { DEFAULT_APP_URL, signInUrl, signUpUrl } from "../src/shared/appLinks.js";
 
 const APP = "https://app.exemplo.com";
 
@@ -17,22 +18,10 @@ test("o endereço padrão do app é https://app.lhamalog.com", () => {
   // Sem VITE_APP_URL (como no teste e no build sem configuração), os botões usam o padrão.
   assert.equal(signInUrl(), "https://app.lhamalog.com/sign-in");
   assert.equal(signUpUrl(), "https://app.lhamalog.com/sign-up");
-  assert.ok(contractUrl("PRO", "MENSAL").startsWith("https://app.lhamalog.com/sign-up?redirect_url="));
 });
 
-test("Contratar leva ao cadastro com o plano e a periodicidade no endereço de retorno (FR-010)", () => {
-  const url = contractUrl("PRO", "SEMESTRAL", APP);
-  assert.ok(url.startsWith(`${APP}/sign-up?redirect_url=`));
-  const destino = decodeURIComponent(url.split("redirect_url=")[1]);
-  assert.equal(destino, `${APP}/assinatura/contratar?plano=PRO&periodo=SEMESTRAL`);
-});
-
-test("Contratar sem app configurado, com endereço inválido ou dado estranho fica indisponível (FR-019)", () => {
-  assert.equal(contractUrl("PRO", "MENSAL", ""), null);
-  assert.equal(contractUrl("PRO", "MENSAL", "javascript:alert(1)"), null);
-  assert.equal(contractUrl("PRO", "MENSAL", "https://app.exemplo.com/caminho"), null);
-  assert.equal(contractUrl("PRO", "ANUAL", APP), null);
-  assert.equal(contractUrl("pro<script>", "MENSAL", APP), null);
+test("Contratar não monta mais endereço no app", () => {
+  assert.equal("contractUrl" in links, false);
 });
 
 test("os cartões de plano não informam teste grátis", () => {

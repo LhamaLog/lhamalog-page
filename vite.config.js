@@ -2,9 +2,10 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import { planosDevPlugin } from "./vite.planos.js";
+import { checkoutPlugin } from "./vite.checkout.js";
 
 export default defineConfig({
-  plugins: [react(), tailwindcss(), planosDevPlugin()],
+  plugins: [react(), tailwindcss(), planosDevPlugin(), checkoutPlugin()],
   server: {
     port: 3000,
     strictPort: true,

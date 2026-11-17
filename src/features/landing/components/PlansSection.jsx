@@ -1,5 +1,4 @@
-import { useEffect, useState } from "react";
-import { contractUrl } from "../../../shared/appLinks";
+import { useEffect, useRef, useState } from "react";
 import wordmark from "../../../shared/assets/lhamalog-wordmark.png";
 import { usePlans } from "../../subscription/hooks/usePlans";
 import { PlansCatalog } from "../../subscription/screens/public/PlansCatalog";
@@ -42,15 +41,39 @@ function AjusteDev({ catalogo, onSaved }) {
   );
 }
 
+const PAGINA_ASAAS = /^https:\/\/(?:sandbox\.asaas\.com|asaas\.com)\/checkoutSession\/show\?id=[A-Za-z0-9_-]+$/;
+
 // Seção de planos: os mesmos cartões e o mesmo seletor, sem duplicar regra de preço.
-// "Contratar" leva ao cadastro no app com o plano e a periodicidade escolhidos; sem o app configurado, mostra "indisponível".
+// "Contratar" pede o checkout à própria página e, se ele abrir, vai ao Asaas. Sem checkout, mostra "indisponível".
 export function PlansSection() {
   const state = usePlans();
   const [unavailable, setUnavailable] = useState(false);
+  const emCurso = useRef(false);
   const subscribe = (plan, period) => {
-    const url = contractUrl(plan.codigo, period);
-    if (url) window.location.assign(url);
-    else setUnavailable(true);
+    if (emCurso.current) return;
+    emCurso.current = true;
+    fetch("/api/contratacao", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ plano: plan.codigo, periodo: period }),
+    })
+      .then(async (resposta) => {
+        if (!resposta.ok) throw new Error("indisponivel");
+        return resposta.json();
+      })
+      .then((corpo) => {
+        const url = typeof corpo?.url === "string" ? corpo.url : "";
+        if (PAGINA_ASAAS.test(url)) {
+          window.location.assign(url);
+          return;
+        }
+        emCurso.current = false;
+        setUnavailable(true);
+      })
+      .catch(() => {
+        emCurso.current = false;
+        setUnavailable(true);
+      });
   };
   return (
     <section
