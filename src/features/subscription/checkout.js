@@ -42,6 +42,9 @@ function retorno(origem) {
     return null;
   }
   if (url.protocol !== "http:" && url.protocol !== "https:") return null;
+  // O Asaas recusa successUrl/cancelUrl/expiredUrl com o nome "localhost" (400).
+  // 127.0.0.1 é o mesmo servidor e o sandbox aceita.
+  if (url.hostname === "localhost") url.hostname = "127.0.0.1";
   return `${url.origin}/`;
 }
 

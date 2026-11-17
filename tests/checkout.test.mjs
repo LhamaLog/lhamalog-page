@@ -92,6 +92,21 @@ test("o endereço segue o ambiente e só aceita id seguro", () => {
   }
 });
 
+test("o retorno em localhost vira 127.0.0.1, que o Asaas aceita", () => {
+  const resultado = montarPedido({
+    codigo: "PRO",
+    nome: "Pro",
+    periodo: "MENSAL",
+    centavosCartao: 41181,
+    origem: "http://localhost:3000",
+    agora: AGORA,
+  });
+  assert.equal(resultado.disponivel, true);
+  assert.equal(resultado.pedido.callback.successUrl, "http://127.0.0.1:3000/");
+  assert.equal(resultado.pedido.callback.cancelUrl, "http://127.0.0.1:3000/");
+  assert.equal(resultado.pedido.callback.expiredUrl, "http://127.0.0.1:3000/");
+});
+
 test("a chave do Asaas que começa com $ permanece inteira", () => {
   const vars = lerEnvLiteral("# comentario\nASAAS_API_KEY=$aact_hmlg_abc\nASAAS_BASE_URL=https://api-sandbox.asaas.com/v3\n");
   assert.equal(vars.ASAAS_API_KEY, "$aact_hmlg_abc");
