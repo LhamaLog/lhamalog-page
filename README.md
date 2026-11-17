@@ -184,10 +184,11 @@ npm run build
 
 ```
 index.html                         documento da página
+public/planos.json                 oferta de planos publicada com a página
 src/main.jsx                       monta a landing
 src/styles.css                     Tailwind e rolagem suave
 src/features/landing/              landing: textos (content.js), cores (landingTokens.js), seções e telas de exemplo
-src/features/subscription/         cartões, seletor de periodicidade e dados dos planos (mesmo contrato da LLT-230)
+src/features/subscription/         cartões e seletor de periodicidade; a oferta fica em public/planos.json
 src/shared/                        logo, endereços do app (appLinks.js) e estados (carregando, erro, vazio)
 tests/                             testes com node --test
 specs/                             Spec Kit: 001 (inicialização) e 002 (landing page)

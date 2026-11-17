@@ -1,19 +1,6 @@
 import { signUpUrl } from "../../../../shared/appLinks";
 import { formatBRL, periodSuffix, planItems, planPrice, semestralSavings } from "../../format";
 import { publicButton, publicCard } from "./publicPlansTokens";
-const DESCRIPTIONS = {
-  FREE: "Para conhecer o LhamaLog",
-  STARTER: "Para um time pequeno com poucos produtos",
-  PRO: "Para times que dependem dos logs todo dia",
-  BUSINESS: "Para empresas com vários produtos",
-  ENTERPRISE: "Para operações grandes e personalizadas",
-};
-const BADGES = {
-  FREE: "Para começar",
-  STARTER: "Mais acessível",
-  BUSINESS: "Mais capacidade",
-  ENTERPRISE: "Mais completo",
-};
 // Preço em partes: "R$" pequeno, inteiro grande, centavos menores. Só separa o texto já formatado (sem cálculo);
 // o período fica numa linha própria, para nenhum valor (nem R$ 16.141,99) quebrar.
 function PriceText({ cents, className }) {
@@ -49,7 +36,7 @@ export function PublicPlanCard({ plan, previous, period, recommended, onSubscrib
   const savings = period === "SEMESTRAL" ? semestralSavings(plan) : null;
   const titleId = `plano-${plan.codigo}`;
   const theme = recommended ? publicCard.featured : publicCard.plain;
-  const badge = BADGES[plan.codigo];
+  const badge = plan.selo || null;
   return (
     <section aria-labelledby={titleId} className={`${publicCard.base} ${theme.surface}`}>
       {recommended && (
@@ -79,7 +66,7 @@ export function PublicPlanCard({ plan, previous, period, recommended, onSubscrib
           )}
         </div>
         <p className={`text-[15px] leading-snug ${theme.text}`}>
-          {DESCRIPTIONS[plan.codigo] ?? ""}
+          {plan.descricao}
         </p>
       </div>
 

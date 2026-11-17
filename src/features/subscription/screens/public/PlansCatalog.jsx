@@ -5,9 +5,7 @@ import { LoadingState } from "../../../../shared/ui/LoadingState";
 import { maxSemestralDiscountPercent } from "../../format";
 import { PeriodSelector } from "../shared/PeriodSelector";
 import { PublicPlanCard } from "./PublicPlanCard";
-// Plano em destaque: o André decidiu manter o Pro (05/11); o PO confirma depois. O Core ainda não manda esta informação.
-const RECOMMENDED_PLAN = "PRO";
-// Seletor de periodicidade, estados (carregando, erro, vazio) e grade de planos da página pública (/planos) e da landing.
+// Seletor de periodicidade, estados (carregando, erro, vazio) e grade de planos da página pública.
 // Só a periodicidade é escolhida aqui; a forma de pagamento é escolhida ao contratar. Devolve um Fragment para os filhos
 // continuarem filhos diretos do layout da página (mesmo espaçamento de antes).
 export function PlansCatalog({ state, onSubscribe, initialPeriod = "MENSAL", header, notice }) {
@@ -51,7 +49,7 @@ export function PlansCatalog({ state, onSubscribe, initialPeriod = "MENSAL", hea
               plan={plan}
               previous={index > 0 ? data.planos[index - 1] : null}
               period={period}
-              recommended={plan.codigo === RECOMMENDED_PLAN}
+              recommended={plan.recomendado === true}
               onSubscribe={(selected) => onSubscribe(selected, period)}
             />
           ))}

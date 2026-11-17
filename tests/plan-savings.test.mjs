@@ -1,10 +1,10 @@
-import { test } from "node:test";
+import { readFileSync } from "node:fs";
 import assert from "node:assert/strict";
+import test from "node:test";
 import { maxSemestralDiscountPercent, semestralSavings } from "../src/features/subscription/format.js";
-import { fakePlans } from "../src/features/subscription/mocks/plans.js";
 
 test("o desconto do semestral é a diferença real para 6 mensalidades no Pix", () => {
-  const plans = fakePlans();
+  const plans = JSON.parse(readFileSync(new URL("../public/planos.json", import.meta.url), "utf8")).planos;
   assert.equal(semestralSavings(plans.find((plan) => plan.codigo === "FREE")), null);
   for (const plan of plans.filter((plan) => plan.precos)) {
     const savings = semestralSavings(plan);
