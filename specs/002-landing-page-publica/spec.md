@@ -8,6 +8,8 @@
 
 **Input**: User description: "Criar a landing page pública do produto na rota /, para visitantes sem login, no estilo de landing de SaaS (barra flutuante, topo com título grande, seções com telas do produto montadas em código, planos, perguntas frequentes e chamada final). Referência de estrutura: https://pluglead.com/ (sem copiar textos, imagens nem números). RF01 a RF10 e critérios de aceitação conforme o pedido original."
 
+> Nota de 2026-11-17: a oferta de planos deixou de ficar no código. A fonte passou a ser `public/planos.json`. O ajuste dessa oferta está em `specs/004-ajuste-planos-local/spec.md`.
+
 ## Clarifications
 
 ### Session 2026-11-10
