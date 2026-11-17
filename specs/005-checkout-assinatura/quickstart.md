@@ -10,7 +10,7 @@ A chave real fica em `.env.local` (já ignorado pelo Git). Não cole a chave no 
 cp .env.example .env.local
 ```
 
-Preencha `ASAAS_API_KEY` com a chave do sandbox. Deixe `ASAAS_BASE_URL` em `https://api-sandbox.asaas.com/v3`. Sem essa chave, os passos 1 e 2 ainda passam; o passo 3 mostra a contratação indisponível, que é o esperado.
+Preencha `ASAAS_API_KEY` com a chave do sandbox. Deixe `ASAAS_BASE_URL` em `https://api-sandbox.asaas.com/v3` e `ASAAS_AMBIENTE` em `HOMOLOGACAO`. Sem essa chave, ou com `PRODUCAO`, os passos 1 e 2 ainda passam; o passo 3 mostra a contratação indisponível, que é o esperado. `HOMOLOGACAO` abre o sandbox em qualquer host.
 
 ## 1. Regra sem rede
 

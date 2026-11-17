@@ -6,7 +6,7 @@ import {
   ipDoPedido,
   lerEnvLiteral,
   montarPedido,
-  sandboxEmHostPublico,
+  sandboxRecusado,
   urlDoCheckout,
 } from "./src/features/subscription/checkout.js";
 
@@ -21,7 +21,7 @@ function preencherAmbiente(mode) {
     if (!existsSync(caminho)) continue;
     Object.assign(lidos, lerEnvLiteral(readFileSync(caminho, "utf8")));
   }
-  for (const nome of ["ASAAS_API_KEY", "ASAAS_BASE_URL"]) {
+  for (const nome of ["ASAAS_API_KEY", "ASAAS_BASE_URL", "ASAAS_AMBIENTE"]) {
     if (!process.env[nome] && lidos[nome]) process.env[nome] = lidos[nome];
   }
 }
@@ -168,8 +168,8 @@ async function contratar(req, res, { lerCatalogo, postCheckout, agora, env, regi
     indisponivel(res);
     return;
   }
-  if (sandboxEmHostPublico(base, req.headers.host)) {
-    registrar("sandbox-publico", ip);
+  if (sandboxRecusado(base, env.ASAAS_AMBIENTE)) {
+    registrar("sandbox-recusado", ip);
     indisponivel(res);
     return;
   }

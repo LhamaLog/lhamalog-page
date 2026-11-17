@@ -94,7 +94,7 @@ O acesso ao Asaas não está configurado, o catálogo do plano pago não tem pre
 - **FR-012**: O desenho da página MUST permanecer o atual. Esta entrega MUST NOT mudar cartões, seletor, textos, selos, ordem dos planos nem o preço de Pix exibido. Esta entrega MUST NOT acrescentar seletor de forma de pagamento, formulário de cadastro nem aviso de teste grátis.
 - **FR-013**: Pix, débito, boleto, teste de 14 dias, ativação de conta, nota fiscal, reembolso, upgrade e cancelamento MUST NOT fazer parte desta entrega. O checkout de assinatura desta página é o de cartão de crédito.
 - **FR-014**: A rota que abre o checkout MUST aceitar só JSON, MUST recusar origem de outro site e MUST limitar tentativas pelo IP do visitante. Atrás de um proxy de rede privada, ou listado em `CONTRATACAO_PROXIES`, esse IP é o último salto de `X-Forwarded-For`. Fora isso, é o IP do socket. O registro da tentativa MUST NOT incluir a chave de acesso. O preço enviado pelo navegador MUST ser ignorado.
-- **FR-015**: Enquanto a base configurada for a de testes, Contratar MUST abrir checkout só em `localhost`, `127.0.0.1` ou `::1`. Num host público, MUST mostrar a contratação indisponível e MUST NOT criar checkout de testes.
+- **FR-015**: `ASAAS_AMBIENTE` decide se a base de testes pode abrir checkout. Com `HOMOLOGACAO`, Contratar MAY abrir o checkout de testes em qualquer host. Com `PRODUCAO`, vazio ou outro valor, Contratar MUST mostrar a contratação indisponível e MUST NOT criar checkout de testes. A decisão MUST NOT depender do host da página.
 
 ### Key Entities
 

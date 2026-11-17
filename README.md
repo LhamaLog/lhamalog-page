@@ -177,7 +177,8 @@ Copie `.env.example` para `.env.local` (ignorado pelo Git) e ajuste:
 | Variável | Para que serve |
 |---|---|
 | `VITE_APP_URL` | Endereço do sistema (lhamalog-web). "Acessar Página" e "Começar grátis" levam para lá. Vazio: usa o padrão `https://app.lhamalog.com`. Só preencha para apontar para outro ambiente. |
-| `ASAAS_BASE_URL` | Ambiente do checkout. Testes: `https://api-sandbox.asaas.com/v3`. Produção (`https://api.asaas.com/v3`) só depois do CNPJ. |
+| `ASAAS_AMBIENTE` | `HOMOLOGACAO` aceita a base de sandbox em qualquer host. `PRODUCAO` recusa o sandbox. Vazio ou outro valor também recusa. Não depende do endereço da página. |
+| `ASAAS_BASE_URL` | Ambiente do checkout. Testes: `https://api-sandbox.asaas.com/v3`, só com `ASAAS_AMBIENTE=HOMOLOGACAO`. Produção: `https://api.asaas.com/v3` com `ASAAS_AMBIENTE=PRODUCAO`. |
 | `ASAAS_API_KEY` | Chave do mesmo ambiente. Fica em `.env.local` ou no ambiente do container. O exemplo em `.env.example` não é uma chave utilizável. |
 
 "Contratar", nos planos pagos, pede o checkout à própria página e abre a página de pagamento do Asaas. "Acessar Página" e "Começar grátis" continuam no app.
