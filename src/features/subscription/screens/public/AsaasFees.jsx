@@ -1,11 +1,10 @@
 import { TAXAS_ASAAS, TAXAS_ASAAS_NOTA, TAXAS_ASAAS_TITULO } from "../../taxasAsaas";
 
-// Faixa na largura da tela, abaixo dos cartões. As três taxas ficam lado a lado
-// e cada uma ocupa um terço da largura, da borda esquerda à direita.
+// Faixa abaixo dos cartões, na mesma largura da grade. As três taxas ficam lado a lado.
 export function AsaasFees() {
   return (
     <section aria-labelledby="taxas-asaas-titulo" className="w-full border-y border-[#D2E1F6] bg-white">
-      <div className="px-4 py-4 text-center sm:px-8">
+      <div className="px-4 py-4 text-center sm:px-6">
         <h3 id="taxas-asaas-titulo" className="text-lg font-bold leading-tight text-[#033473]">
           {TAXAS_ASAAS_TITULO}
         </h3>

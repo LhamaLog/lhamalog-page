@@ -119,12 +119,8 @@ export function PlansSection() {
             ) : null
           }
         />
+        {planosVisiveis && <AsaasFees />}
       </div>
-      {planosVisiveis && (
-        <div className="mt-10 sm:mt-12">
-          <AsaasFees />
-        </div>
-      )}
       {import.meta.env.DEV && __LHAMALOG_AJUSTE_PLANOS__ ? (
         <div className={`${landingSection.wideContainer} mt-8`}>
           <AjusteDev catalogo={state.data} onSaved={state.reload} />

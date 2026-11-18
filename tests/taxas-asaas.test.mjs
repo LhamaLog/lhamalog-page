@@ -21,7 +21,8 @@ test("a seção de planos mostra as taxas em faixa horizontal e não mostra desc
   const secao = fonte("features/landing/components/PlansSection.jsx");
   const cartao = fonte("features/subscription/screens/public/PublicPlanCard.jsx");
   const quadro = fonte("features/subscription/screens/public/AsaasFees.jsx");
-  assert.ok(secao.indexOf("<PlansCatalog") < secao.indexOf("<AsaasFees"));
+  const faixa = secao.slice(secao.indexOf("wideContainer"), secao.indexOf("<AsaasFees") + "<AsaasFees".length);
+  assert.ok(faixa.includes("<PlansCatalog") && faixa.includes("<AsaasFees"));
   assert.ok(!catalogo.includes("AsaasFees"));
   assert.ok(!catalogo.includes("desconto"));
   assert.ok(!catalogo.includes("hints"));
