@@ -17,7 +17,6 @@ export const HERO = {
     "O LhamaLog recebe os logs da sua aplicação por OpenTelemetry, agrupa os erros em ocorrências, mascara dados sensíveis, sugere a causa com IA e avisa a equipe certa.",
   botaoPrincipal: "Começar grátis",
   botaoSecundario: "Ver planos",
-  oferta: "Plano grátis",
 };
 // Como funciona (FR-004)
 export const HOW_IT_WORKS = {

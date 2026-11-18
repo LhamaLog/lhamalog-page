@@ -81,7 +81,7 @@ export function PlansSection() {
     <section
       id="planos"
       aria-labelledby="planos-titulo"
-      className={`${landingSection.anchor} ${landingSection.spacing} bg-[#F2F2F2]`}
+      className={`${landingSection.anchor} ${landingSection.spacing} overflow-x-clip bg-[#F2F2F2]`}
     >
       <div className={`${landingSection.wideContainer} space-y-8`}>
         <PlansCatalog
@@ -117,10 +117,12 @@ export function PlansSection() {
             ) : null
           }
         />
-        {import.meta.env.DEV && __LHAMALOG_AJUSTE_PLANOS__ ? (
-          <AjusteDev catalogo={state.data} onSaved={state.reload} />
-        ) : null}
       </div>
+      {import.meta.env.DEV && __LHAMALOG_AJUSTE_PLANOS__ ? (
+        <div className={`${landingSection.wideContainer} mt-8`}>
+          <AjusteDev catalogo={state.data} onSaved={state.reload} />
+        </div>
+      ) : null}
     </section>
   );
 }

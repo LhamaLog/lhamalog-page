@@ -2,10 +2,10 @@ import { signUpUrl } from "../../../shared/appLinks";
 import { HERO } from "../content";
 import { landingButton, landingSection } from "../landingTokens";
 import { LogStreamMock } from "./mocks/LogStreamMock";
-// Topo (FR-002): título grande, subtítulo, "Começar grátis" (cadastro), "Ver planos" (âncora) e a linha de oferta, com a janela
+// Topo (FR-002): título grande, subtítulo, "Começar grátis" (cadastro) e "Ver planos" (âncora), com a janela
 // animada dos logs (FR-023), que termina na sugestão por IA (o diferencial do produto), já na primeira tela.
 // Layout: de 1024 px em diante, duas colunas (texto à esquerda, tela à direita, alinhados pelo centro); abaixo disso, uma coluna
-// centralizada com a tela depois do texto. No código a ordem é sempre título, subtítulo, botões, linha de oferta e só então a
+// centralizada com a tela depois do texto. No código a ordem é sempre título, subtítulo, botões e só então a
 // tela, então a leitura por leitor de tela e por Tab segue a ordem visual nos dois layouts (FR-013).
 // Fundo só com CSS (FR-018): degradê de branco para azul bem claro, com 3 brilhos arredondados em azul translúcido, na paleta
 // do LhamaLog. O `overflow-hidden` da seção corta os brilhos que passam das bordas (sem rolagem lateral em 375 px) e o
@@ -38,10 +38,6 @@ export function Hero() {
               {HERO.botaoSecundario}
             </a>
           </div>
-          {/* text-balance: quando a linha quebra (por exemplo em 1024 px), as duas linhas ficam parecidas e "mensais" não fica sozinho. */}
-          <p className="mt-5 text-sm font-medium leading-snug text-balance text-[#141826] sm:text-base">
-            {HERO.oferta}
-          </p>
         </div>
 
         {/* Janela dos logs, com a legenda "Exemplo ilustrativo" e o aria-label aprovados da tela de sugestão por IA (FR-020). */}
