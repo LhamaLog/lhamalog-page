@@ -7,7 +7,4 @@ export const TAXAS_ASAAS = [
   { meio: "Cartão de débito", valor: "1,89% + R$ 0,35" },
 ];
 
-export const TAXAS_ASAAS_TITULO = "Taxas do Asaas";
-
-export const TAXAS_ASAAS_NOTA =
-  "Por cobrança recebida. O preço de cada plano é o do Pix e já inclui a taxa do Pix. No cartão, a cobrança usa a taxa correspondente.";
+export const TAXA_CARTAO = TAXAS_ASAAS.find((taxa) => taxa.meio === "Cartão de crédito").valor;

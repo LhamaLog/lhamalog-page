@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import { criarTravaClique, destinoContratacao } from "../../subscription/checkout";
 import wordmark from "../../../shared/assets/lhamalog-wordmark.png";
 import { usePlans } from "../../subscription/hooks/usePlans";
-import { AsaasFees } from "../../subscription/screens/public/AsaasFees";
 import { PlansCatalog } from "../../subscription/screens/public/PlansCatalog";
 import { SUPPORT_TEXTS } from "../content";
 import { landingSection, landingText } from "../landingTokens";
@@ -78,7 +77,6 @@ export function PlansSection() {
         setUnavailable(true);
       });
   };
-  const planosVisiveis = !state.loading && !state.error && (state.data?.planos?.length ?? 0) > 0;
   return (
     <section
       id="planos"
@@ -119,7 +117,6 @@ export function PlansSection() {
             ) : null
           }
         />
-        {planosVisiveis && <AsaasFees />}
       </div>
       {import.meta.env.DEV && __LHAMALOG_AJUSTE_PLANOS__ ? (
         <div className={`${landingSection.wideContainer} mt-8`}>

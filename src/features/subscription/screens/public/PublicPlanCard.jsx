@@ -1,6 +1,6 @@
 import { signUpUrl } from "../../../../shared/appLinks";
 import { formatBRL, periodSuffix, planItems, planPrice } from "../../format";
-import { TAXAS_ASAAS } from "../../taxasAsaas";
+import { TAXA_CARTAO } from "../../taxasAsaas";
 import { publicButton, publicCard } from "./publicPlansTokens";
 // Preço em partes: "R$" pequeno, inteiro grande, centavos menores. Só separa o texto já formatado (sem cálculo);
 // o período fica numa linha própria, para nenhum valor (nem R$ 16.141,99) quebrar.
@@ -28,14 +28,13 @@ function PriceText({ cents, className }) {
 }
 // Cartão de plano da página pública. Cinco linhas alinhadas entre todos os cartões (grade com subgrade):
 // cabeçalho, preço, botão, lista e nota. O recomendado (Pro) fica em azul escuro da marca (#033473).
-// O preço mostrado é o do Pix (o boleto custa o mesmo) e já inclui a taxa do Pix.
-// Cartão de crédito e débito usam as taxas do quadro da seção; a pessoa escolhe ao contratar.
+// O preço mostrado é o do Pix (o boleto custa o mesmo). A taxa do cartão de crédito
+// fica imediatamente antes desse valor.
 export function PublicPlanCard({ plan, previous, period, recommended, onSubscribe }) {
   const price = planPrice(plan, period, "PIX");
   const overage = plan.precoGbExcedenteCentavos?.PIX;
   const free = price === null;
   const { title, items } = planItems(plan, previous, period);
-  const taxaPix = TAXAS_ASAAS.find((taxa) => taxa.meio === "Pix");
   const titleId = `plano-${plan.codigo}`;
   const theme = recommended ? publicCard.featured : publicCard.plain;
   const badge = plan.selo || null;
@@ -78,16 +77,17 @@ export function PublicPlanCard({ plan, previous, period, recommended, onSubscrib
             Grátis
           </span>
         ) : (
-          <PriceText cents={price} className={theme.price} />
+          <>
+            <p className={`mb-2 text-sm font-semibold leading-snug ${theme.price}`}>
+              <span className="sr-only">Taxa do cartão de crédito </span>
+              <span className="whitespace-nowrap">{TAXA_CARTAO}</span>
+            </p>
+            <PriceText cents={price} className={theme.price} />
+          </>
         )}
         <span className={`mt-2 block text-sm leading-snug ${theme.muted}`}>
           {free ? "sem cartão" : periodSuffix(period)}
         </span>
-        {!free && taxaPix && (
-          <p className={`mt-2 text-sm leading-snug ${theme.muted}`}>
-            Taxa do Pix: <span className="whitespace-nowrap font-semibold">{taxaPix.valor}</span>
-          </p>
-        )}
       </div>
 
       <div className="pt-4">
