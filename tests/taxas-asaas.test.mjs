@@ -16,13 +16,17 @@ test("as taxas do Asaas são as da aba Taxas Asaas, sem promoção", () => {
   assert.ok(!/desconto/i.test(TAXAS_ASAAS_NOTA));
 });
 
-test("a seção de planos mostra as taxas e não mostra desconto", () => {
+test("a seção de planos mostra as taxas em faixa horizontal e não mostra desconto", () => {
   const catalogo = fonte("features/subscription/screens/public/PlansCatalog.jsx");
+  const secao = fonte("features/landing/components/PlansSection.jsx");
   const cartao = fonte("features/subscription/screens/public/PublicPlanCard.jsx");
   const quadro = fonte("features/subscription/screens/public/AsaasFees.jsx");
-  assert.ok(catalogo.includes("<AsaasFees"));
+  assert.ok(secao.indexOf("<PlansCatalog") < secao.indexOf("<AsaasFees"));
+  assert.ok(!catalogo.includes("AsaasFees"));
   assert.ok(!catalogo.includes("desconto"));
   assert.ok(!catalogo.includes("hints"));
+  assert.ok(quadro.includes('className="w-full border-y'));
+  assert.ok(quadro.includes("grid w-full grid-cols-3"));
   assert.ok(quadro.includes("TAXAS_ASAAS") && quadro.includes("TAXAS_ASAAS_TITULO"));
   assert.ok(cartao.includes("Taxa do Pix:"));
   assert.ok(!cartao.includes("economiza") && !cartao.includes("line-through") && !cartao.includes("desconto"));
