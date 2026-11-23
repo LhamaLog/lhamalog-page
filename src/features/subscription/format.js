@@ -31,8 +31,8 @@ export function periodSuffix(period) {
 export function planPrice(plan, period, method) {
   return plan.precos?.[period]?.[method] ?? null;
 }
-// Diferença entre 6 mensalidades e o semestral, no mesmo meio de pagamento que o card mostra (Pix).
-// Não cria preço: os dois valores já são públicos. Sem preço, ou se o semestral não fica mais barato, devolve null.
+// Diferença entre 6 mensalidades e o semestral, no Pix. Não cria preço: os dois valores já são públicos.
+// A página não mostra essa diferença como desconto. Sem preço, ou se o semestral não fica mais barato, devolve null.
 export function semestralSavings(plan, method = "PIX") {
   const monthly = planPrice(plan, "MENSAL", method);
   const semestral = planPrice(plan, "SEMESTRAL", method);

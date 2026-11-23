@@ -35,11 +35,12 @@ function pageStrings() {
   return out;
 }
 
-test("topo: título, subtítulo e linha de oferta iguais à spec (FR-002)", () => {
+test("topo: título e subtítulo iguais à spec, sem a linha Plano grátis (FR-002)", () => {
   inSpec(HERO.titulo);
   inSpec(HERO.subtitulo);
-  inSpec(HERO.oferta);
-  assert.equal(HERO.oferta, "Plano grátis");
+  assert.equal("oferta" in HERO, false);
+  assert.ok(!source("components/Hero.jsx").includes("Plano grátis"));
+  assert.ok(!source("components/Hero.jsx").includes("HERO.oferta"));
 });
 
 test("Como funciona: 3 cards com os textos da spec (FR-004)", () => {
@@ -120,14 +121,13 @@ test("nenhum número, depoimento ou cliente nos textos da página, fora o ano do
 const source = (path) =>
   readFileSync(new URL(`../src/features/landing/${path}`, import.meta.url), "utf8");
 
-test("topo: a tela de exemplo da IA vem depois de título, subtítulo, botões e linha de oferta, na ordem do código (FR-002, FR-013)", () => {
+test("topo: a tela de exemplo da IA vem depois de título, subtítulo e botões, na ordem do código (FR-002, FR-013)", () => {
   const hero = source("components/Hero.jsx");
   const order = [
     "HERO.titulo",
     "HERO.subtitulo",
     "HERO.botaoPrincipal",
     "HERO.botaoSecundario",
-    "HERO.oferta",
     "<LogStreamMock",
   ].map((marker) => hero.indexOf(marker));
   assert.ok(
